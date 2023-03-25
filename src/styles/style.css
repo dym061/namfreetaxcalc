@@ -27,7 +27,7 @@
 
 .mxauto {
   margin-left:auto;
-  margin-right:auto;} 
+  margin-right:auto;}
 
 .mt3 {margin-top: 20px;}
 
@@ -44,8 +44,6 @@
 .txtfont2 {font-family: font2;}
 
 .txtupper {text-transform: uppercase;}
-
-.w100p{width: 100px;}
 
 @media screen and (max-width: 768px) 
  {
