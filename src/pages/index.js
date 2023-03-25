@@ -1,5 +1,17 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import {
+  FacebookShareButton,
+  FacebookIcon,
+  PinterestShareButton,
+  PinterestIcon,
+  RedditShareButton,
+  RedditIcon,
+  WhatsappShareButton,
+  WhatsappIcon,
+  LinkedinShareButton,
+  LinkedinIcon,
+} from 'next-share';
 
 export default function Home() {
 	
@@ -131,70 +143,110 @@ export default function Home() {
 	  }
 	};	
 	
+	const shareUrl = "https://namfreetaxcalc.vercel.app"
+	
+	const today = new Date()
+	const year = today.getFullYear();	
+	
 	return (
-		<section className="dflex mt3">
-			<div className="con dflex shadow1">
-				<div className="mxauto mb3 p2">
-					<div className="dflex p2">
-						<Image width={100} height={65} src="/flag.png" alt="Namibian Flag" className="mxauto shadow1" />
-					</div>
-					<h1 className="txtbold h4 txtfont2 txtcenter">Namibia Free Tax Calculator</h1>
-					<p className="h5 txtfont1 txtcenter">Type your Monthly Salary / Estimate:</p>
-					<div className="dflex">
-						<input
-							type="number"
-							step="500"
-							name="amount"
-							value={amount}
-							onChange={(e) => setAmount(e.target.value)}
-							onWheel={handleSliderWheel}
-							className="border border1 bordercol1 mr1 p2 mxauto txtcenter txtfont2"
-						/>
-					</div>
-				    <div className="dflex">
-						<input
-							type="range"
-							min="0"
-							max="250000"
-							step="50"
-							value={amount}
-							onChange={handleSliderChange}
-							onWheel={handleSliderWheel}
-							className="border border1 bordercol1 mr1 p2 mxauto txtcenter txtfont2"
-						/>
-				    </div>					
-					<div className="result-container txtfont2">
-						<p className="txtcenter">Annual Salary: N$ {yearly}</p>
-						<p className="txtbold txtcenter">Annual Tax Payable: {response}</p>
-						<p className="txtcenter">Bi-Annual Tax Payable: {biannual}</p>
-						<p className="txtcenter">Quarterly Tax Payable: {quarterly}</p>
-						<p className="txtcenter">Monthly: {monthly}</p>
-					</div>
-					<div className="dflex pb3">
-						<Image 
-							width={35} 
-							height={35} 
-							src="/rotate-right-solid.png" 
-							alt="Reset Button" 
-							className="mxauto mt3 fillblue" 
-							onClick={handleReset}
-						/>
-					</div>
-					<hr/>
-					<div className="txtcenter txtfont2">
-						<p className="pb3 ">Introducing the Namibia Free Tax Calculator! Easily and instantly calculate your annual tax payable based on your monthly salary/estimate. This free-to-use user-friendly calculator is designed to help you estimate your taxes and make informed decisions about your finances. Simply input your monthly salary/estimate and let the calculator do the rest. Our easy-to-read results will show your annual salary and tax payable, as well as bi-annual, quarterly, and monthly tax payable amounts. Reset the calculator at any time to start over, and use the slider to adjust your monthly salary/estimate. This tool is perfect for anyone who wants to estimate their taxes quickly and accurately. Try it out today and take control of your finances!</p>
-						<p className="txtbold pb3">The Namibia Free Tax Calculator uses the following information to provide its results:</p>
-						<p>N$ 0 - 50 000 : Not taxable</p>
-						<p>N$ 50 001 - 100 000 : 18% for each N$ above 50 000</p>
-						<p>N$ 100 001 - 300 000 : N$ 9 000 + 25% for each N$ above N$ 100 000</p>
-						<p>N$ 300 001 - 500 000 : N$ 59 000 + 28% for each N$ above N$ 300 000</p>
-						<p>N$ 500 001 - 800 000 : N$ 115 000 + 30% for each N$ above N$ 500 000</p>
-						<p>N$ 800 001 - 1 500 000 : N$ 205 000 + 32% for each N$ above N$ 800 000</p>
-						<p>Above N$ 1 500 000 : N$ 429 000 + 37% for each N$ above N$ 1 500 000</p>
+		<>
+			<section className="dflex mt3 ">
+				<div className="con dflex shadow1 ">
+					<div className="mxauto mb3 p2">
+						<div className="dflex p2">
+							<Image width={100} height={65} src="/flag.png" alt="Namibian Flag" className="mxauto shadow1" />
+						</div>
+						<h1 className="txtbold h4 txtfont2 txtcenter">Namibia Free Tax Calculator</h1>
+						<p className="h5 txtfont1 txtcenter">Type your Monthly Salary / Estimate:</p>
+						<div className="dflex">
+							<input
+								type="number"
+								step="500"
+								name="amount"
+								value={amount}
+								onChange={(e) => setAmount(e.target.value)}
+								onWheel={handleSliderWheel}
+								className="border border1 bordercol1 mr1 p2 mxauto txtcenter txtfont2"
+							/>
+						</div>
+						<div className="dflex">
+							<input
+								type="range"
+								min="0"
+								max="250000"
+								step="50"
+								value={amount}
+								onChange={handleSliderChange}
+								onWheel={handleSliderWheel}
+								className="border border1 bordercol1 mr1 p2 mxauto txtcenter txtfont2"
+							/>
+						</div>					
+						<div className="result-container txtfont2">
+							<p className="txtcenter">Annual Salary: N$ {yearly}</p>
+							<p className="txtbold txtcenter">Annual Tax Payable: {response}</p>
+							<p className="txtcenter">Bi-Annual Tax Payable: {biannual}</p>
+							<p className="txtcenter">Quarterly Tax Payable: {quarterly}</p>
+							<p className="txtcenter">Monthly: {monthly}</p>
+						</div>
+						<div className="dflex pb3">
+							<Image 
+								width={35} 
+								height={35} 
+								src="/rotate-right-solid.png" 
+								alt="Reset Button" 
+								className="mxauto mt3 fillblue" 
+								onClick={handleReset}
+							/>
+						</div>
+						<hr/>
+						<div className="txtcenter txtfont2 pb3">
+							<p className="pb3 ">Introducing the Namibia Free Tax Calculator! Easily and instantly calculate your annual tax payable based on your monthly salary/estimate. This free-to-use user-friendly calculator is designed to help you estimate your taxes and make informed decisions about your finances. Simply input your monthly salary/estimate and let the calculator do the rest. Our easy-to-read results will show your annual salary and tax payable, as well as bi-annual, quarterly, and monthly tax payable amounts. Reset the calculator at any time to start over, and use the slider to adjust your monthly salary/estimate. This tool is perfect for anyone who wants to estimate their taxes quickly and accurately. Try it out today and take control of your finances!</p>
+							<p className="txtbold pb3">The Namibia Free Tax Calculator uses the following information to provide its results:</p>
+							<p>N$ 0 - 50 000 : Not taxable</p>
+							<p>N$ 50 001 - 100 000 : 18% for each N$ above 50 000</p>
+							<p>N$ 100 001 - 300 000 : N$ 9 000 + 25% for each N$ above N$ 100 000</p>
+							<p>N$ 300 001 - 500 000 : N$ 59 000 + 28% for each N$ above N$ 300 000</p>
+							<p>N$ 500 001 - 800 000 : N$ 115 000 + 30% for each N$ above N$ 500 000</p>
+							<p>N$ 800 001 - 1 500 000 : N$ 205 000 + 32% for each N$ above N$ 800 000</p>
+							<p>Above N$ 1 500 000 : N$ 429 000 + 37% for each N$ above N$ 1 500 000</p>
+						</div>
+						
 					</div>
 				</div>
+			</section>
+			<div className="con2">
+				<footer className="con footer">
+					<div className="dflex">
+						<div className=" txtcenter mxauto">
+						  <p className=" txtbold txtfont2">Share</p>
+						  <FacebookShareButton
+							url={shareUrl} >
+							<FacebookIcon size={32} round />
+						  </FacebookShareButton>
+						  <PinterestShareButton
+							url={shareUrl} >
+							<PinterestIcon size={32} round />
+						  </PinterestShareButton>
+						  <RedditShareButton
+							url={shareUrl} >
+							<RedditIcon size={32} round />
+						  </RedditShareButton>
+						  <WhatsappShareButton
+							url={shareUrl} >
+							<WhatsappIcon size={32} round />
+						  </WhatsappShareButton>
+						  <LinkedinShareButton
+							url={shareUrl} >
+							<LinkedinIcon size={32} round />
+						  </LinkedinShareButton>
+						</div>
+					</div>
+					<div className="txtcenter txtfont2">
+					brewed in <span className='text--strong'> Next.js </span> . <span className='text--strong'> React </span> | <span> {year} </span>
+					</div>
+				</footer>
 			</div>
-		</section>
+		</>
 	);
 	
 }
