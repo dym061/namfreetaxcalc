@@ -96,6 +96,14 @@ export default function Home() {
       setAmount(event.target.value);
     };	
 	
+	const handleReset = () => {
+		setAmount(0);
+		setYearly(0);
+		setResponse('Not taxable');
+		setBiannual('Not taxable');
+		setQuarterly('Not taxable');
+	};		
+	
 	const handleSliderWheel = (event) => {
 	  event.preventDefault();
 
@@ -116,7 +124,7 @@ export default function Home() {
 					</div>
 					<h1 className="txtbold h4 txtfont2 txtcenter">Namibia Free Tax Calculator</h1>
 					<p className="h5 txtfont1 txtcenter">Type your Monthly Salary / Estimate:</p>
-					<div className="dflex mb3">
+					<div className="dflex">
 						<input
 							type="number"
 							step="500"
@@ -145,6 +153,19 @@ export default function Home() {
 						<p className="txtcenter">Bi-Annual Tax Payable: {biannual}</p>
 						<p className="txtcenter">Quarterly Tax Payable: {quarterly}</p>
 					</div>
+					<div className="dflex">
+						<Image 
+							width={35} 
+							height={35} 
+							src="/rotate-right-solid.png" 
+							alt="Reset Button" 
+							className="mxauto mt3 fillblue" 
+							onClick={handleReset}
+						/>
+
+						
+					</div>
+					
 				</div>
 			</div>
 		</section>
