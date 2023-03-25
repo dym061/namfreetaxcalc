@@ -6,13 +6,13 @@ export default function App({ Component, pageProps }) {
   return (
 	<>
       <Head>
-        <title>Namibia Free Tax Calculator</title>
-        <meta name="description" content="Calculate your income taxes in Namibia with this free tax calculator. Estimate your annual, bi-annual, and quarterly tax payable." />
-        <meta name="keywords" content="income tax, Namibia, tax calculator, Namibian tax calculator, monthly tax calculator, Namibia monthly tax calculator, Namibia monthly salary calculator, Namibia monthly wage calculator, Namibia monthly salary after tax calculator, online calculators, icalculator, calculator, calculatr, Namibia Tax Calculator, income tax information, free tax calculator, annual tax payable, bi-annual tax payable, quarterly tax payable, income tax rates, social security deductions, pension deductions, 2023 tax rates" />
+        <title>Namibia Free Tax Calculator</title> 
+        <meta name="description" content="Easily and quickly calculate your income taxes in Namibia with this free tax calculator. Estimate your annual, bi-annual, quarterly, and monthly income tax payable." />
+        <meta name="keywords" content="Namibia, Namibia Free Tax Calculator, Monthly Salary, Estimate, Annual Salary, Tax Payable, Bi-Annual Tax Payable, Quarterly Tax Payable, User-friendly calculator, Finances, Easy-to-read results, Bi-annual, Quarterly, Monthly tax payable amounts, Slider, Adjust, Tool, Estimate taxes, Namibian tax rates" />
         <meta name="author" content="Ciesto Media & Design" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />		
         <meta property="og:title" content="Namibia Free Tax Calculator" />
-        <meta property="og:description" content="Calculate your taxes in Namibia with this free tax calculator. Estimate your annual, bi-annual, and quarterly tax payable." />
+        <meta property="og:description" content="Easily and quickly calculate your income taxes in Namibia with this free tax calculator. Estimate your annual, bi-annual, quarterly, and monthly income tax payable." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://namfreetaxcalc.vercel.app/" />
         <meta property="og:image" content="https://namfreetaxcalc.vercel.app/_next/image?url=%2Fflag.png&w=128&q=75" />
