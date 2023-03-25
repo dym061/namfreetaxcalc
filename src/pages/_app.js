@@ -13,10 +13,10 @@ export default function App({ Component, pageProps }) {
 		<meta property="og:title" content="Namibia Free Tax Calculator" />
 		<meta property="og:description" content="Calculate your taxes in Namibia with this free tax calculator. Estimate your annual, bi-annual, and quarterly tax payable." />
 		<meta property="og:type" content="website" />
-		<meta property="og:url" content="https://yourdomain.com/" />
-		<meta property="og:image" content="https://yourdomain.com/og-image.jpg" />
+		<meta property="og:url" content="https://namfreetaxcalc.vercel.app/" />
+		<meta property="og:image" content="https://namfreetaxcalc.vercel.app/_next/image?url=%2Fflag.png&w=128&q=75" />
 		
-		<link rel="canonical" href="https://yourdomain.com/" />
+		<link rel="canonical" href="https://namfreetaxcalc.vercel.app/" />
 		
 		<script type="application/ld+json">
 			{JSON.stringify({
@@ -24,8 +24,8 @@ export default function App({ Component, pageProps }) {
 				"@type": "WebApplication",
 				"name": "Namibia Free Tax Calculator",
 				"description": "Calculate your taxes in Namibia with this free tax calculator. Estimate your annual, bi-annual, and quarterly tax payable.",
-				"url": "https://yourdomain.com/",
-				"image": "https://yourdomain.com/og-image.jpg",
+				"url": "https://namfreetaxcalc.vercel.app/",
+				"image": "https://namfreetaxcalc.vercel.app/_next/image?url=%2Fflag.png&w=128&q=75",
 				"applicationCategory": "Finance",
 				"operatingSystem": "Web",
 				"offers": {
