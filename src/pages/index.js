@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
-
 export default function Home() {
 	
 	const [amount, setAmount] = useState(0);
@@ -93,6 +92,21 @@ export default function Home() {
 		
 	}, [yearly]);
 	
+    const handleSliderChange = (event) => {
+      setAmount(event.target.value);
+    };	
+	
+	const handleSliderWheel = (event) => {
+	  event.preventDefault();
+
+	  const currentValue = parseInt(amount);
+	  const newValue = currentValue + (event.deltaY > 0 ? -1000 : 1000);
+
+	  if (newValue >= 0 && newValue <= 250000) {
+		setAmount(newValue.toString());
+	  }
+	};	
+	
 	return (
 		<section className="dflex mt3">
 			<div className="con dflex p3 shadow1">
@@ -109,9 +123,22 @@ export default function Home() {
 							name="amount"
 							value={amount}
 							onChange={(e) => setAmount(e.target.value)}
+							onWheel={handleSliderWheel}
 							className="border border1 bordercol1 mr1 p2 mxauto txtcenter txtfont2"
 						/>
 					</div>
+				    <div className="dflex">
+						<input
+							type="range"
+							min="0"
+							max="250000"
+							step="50"
+							value={amount}
+							onChange={handleSliderChange}
+							onWheel={handleSliderWheel}
+							className="border border1 bordercol1 mr1 p2 mxauto txtcenter txtfont2"
+						/>
+				    </div>					
 					<div className="result-container txtfont2">
 						<p className="txtcenter">Annual Salary: N$ {yearly}</p>
 						<p className="txtbold txtcenter">Annual Tax Payable: {response}</p>
