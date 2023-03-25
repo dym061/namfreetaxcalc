@@ -170,7 +170,7 @@ export default function Home() {
 						<p className="txtcenter">Quarterly Tax Payable: {quarterly}</p>
 						<p className="txtcenter">Monthly: {monthly}</p>
 					</div>
-					<div className="dflex">
+					<div className="dflex pb3">
 						<Image 
 							width={35} 
 							height={35} 
@@ -179,6 +179,19 @@ export default function Home() {
 							className="mxauto mt3 fillblue" 
 							onClick={handleReset}
 						/>
+					</div>
+					<hr/>
+					<div className="txtcenter txtfont2">
+						<p className="pb3 ">Introducing the Namibia Free Tax Calculator! Easily calculate your annual tax payable based on your monthly salary/estimate. This free-to-use user-friendly calculator is designed to help you estimate your taxes and make informed decisions about your finances. Simply input your monthly salary/estimate and let the calculator do the rest. Our easy-to-read results will show your annual salary and tax payable, as well as bi-annual, quarterly, and monthly tax payable amounts. Reset the calculator at any time to start over, and use the slider to adjust your monthly salary/estimate. This tool is perfect for anyone who wants to estimate their taxes quickly and accurately. Try it out today and take control of your finances!</p>
+						<p className="txtbold pb3">The Namibia Free Tax Calculator uses the following information to provide its results:</p>
+						
+						<p>N$ 0 - 50 000 : Not taxable</p>
+						<p>N$ 50 001 - 100 000 : 18% for each N$ above 50 000</p>
+						<p>N$ 100 001 - 300 000 : N$ 9 000 + 25% for each N$ above N$ 100 000</p>
+						<p>N$ 300 001 - 500 000 : N$ 59 000 + 28% for each N$ above N$ 300 000</p>
+						<p>N$ 500 001 - 800 000 : N$ 115 000 + 30% for each N$ above N$ 500 000</p>
+						<p>N$ 800 001 - 1 500 000 : N$ 205 000 + 32% for each N$ above N$ 800 000</p>
+						<p>Above N$ 1 500 000 : N$ 429 000 + 37% for each N$ above N$ 1 500 000</p>
 					</div>
 				</div>
 			</div>
