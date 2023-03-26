@@ -150,7 +150,7 @@ export default function Home() {
 	
 	return (
 		<>
-			<section className="dflex mt3 ">
+			<section className="dflex">
 				<div className="con dflex shadow1 ">
 					<div className="mxauto mb3 p2">
 						<div className="dflex p2">
