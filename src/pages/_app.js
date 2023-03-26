@@ -5,6 +5,20 @@ import Head from 'next/head';
 export default function App({ Component, pageProps }) {
   return (
 	<>
+	
+		<Script strategy="lazyOnload" src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`} />
+
+		<Script strategy="lazyOnload">
+		{`
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}', {
+			page_path: window.location.pathname,
+			});
+		`}
+		</Script>
+	
       <Head>
         <title>Namibia Free Tax Calculator</title> 
         <meta name="description" content="Easily and quickly calculate your income taxes in Namibia with this free tax calculator. Estimate your annual, bi-annual, quarterly, and monthly income tax payable." />
