@@ -242,7 +242,7 @@ export default function Home() {
 						</div>
 					</div>
 					<div className="txtcenter txtfont2">
-					brewed in <span className='text--strong'> Next.js </span> . <span className='text--strong'> React </span> | <span> {year} </span>
+					<span className="txtfont1">&#169; {year} <a href="https://www.facebook.com/ciestomedia" target="_blank" >Ciesto Media &amp; Design</a>  </span>
 					</div>
 				</footer>
 			</div>
