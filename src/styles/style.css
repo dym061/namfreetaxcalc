@@ -4,8 +4,6 @@
 
 .bordercol1 {border-color: #000000;}
 
-
-
 .con {
   width: 1200px;
   max-width: 100%;
@@ -25,11 +23,11 @@
 .fillblue {filter: invert(15%) sepia(99%) saturate(5040%) hue-rotate(203deg) brightness(95%) contrast(102%);}
 
 .footer {
-  position: fixed;
   left: 0;
   bottom: 0;
   width: 100%;
-  background-color: #EEEEEE;
+  background-color: #ffffff;
+  color: #000000;
   padding: 10px;
   text-align: center;
 }

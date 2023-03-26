@@ -133,16 +133,29 @@ export default function Home() {
 	};		
 	
 	const handleSliderWheel = (event) => {
-	  event.preventDefault();
-
+		
 	  const currentValue = parseInt(amount);
 	  const newValue = currentValue + (event.deltaY > 0 ? -1000 : 1000);
 
 	  if (newValue >= 0 && newValue <= 250000) {
 		setAmount(newValue.toString());
 	  }
-	};	
-	
+	};
+
+	useEffect(() => {
+	  const handleWheel = (event) => {
+		if (event.target.type === 'range') {
+		  event.preventDefault();
+		}
+	  };
+
+	  document.body.addEventListener('wheel', handleWheel, { passive: false });
+
+	  return () => {
+		document.body.removeEventListener('wheel', handleWheel);
+	  };
+	}, []);	
+		
 	const shareUrl = "https://namfreetaxcalc.vercel.app"
 	
 	const today = new Date()
@@ -165,7 +178,7 @@ export default function Home() {
 								name="amount"
 								value={amount}
 								onChange={(e) => setAmount(e.target.value)}
-								onWheel={handleSliderWheel}
+								
 								className="border border1 bordercol1 mr1 p2 mxauto txtcenter txtfont2"
 							/>
 						</div>
@@ -199,7 +212,7 @@ export default function Home() {
 							/>
 						</div>
 						<hr/>
-						<div className="txtcenter txtfont2 pb3">
+						<div className="txtcenter txtfont2 p3">
 							<p className="pb3 ">Introducing the Namibia Free Tax Calculator! Easily and instantly calculate your annual tax payable based on your monthly salary/estimate. This free-to-use user-friendly calculator is designed to help you estimate your taxes and make informed decisions about your finances. Simply input your monthly salary/estimate and let the calculator do the rest. Our easy-to-read results will show your annual salary and tax payable, as well as bi-annual, quarterly, and monthly tax payable amounts. Reset the calculator at any time to start over, and use the slider to adjust your monthly salary/estimate. This tool is perfect for anyone who wants to estimate their taxes quickly and accurately. Try it out today and take control of your finances!</p>
 							<p className="txtbold pb3">The Namibia Free Tax Calculator uses the following information to provide its results:</p>
 							<p>N$ 0 - 50 000 : Not taxable</p>
@@ -250,3 +263,4 @@ export default function Home() {
 	);
 	
 }
+
