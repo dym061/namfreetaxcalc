@@ -6,7 +6,7 @@
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 
 <url>
-  <loc>https://namfreetaxcalc.vercel.app/</loc>
+  <loc>https://namfreetaxcalc.vercel.app</loc>
   <lastmod>2023-03-26T11:00:00+00:00</lastmod>
   <priority>0.7</priority>
 </url>
