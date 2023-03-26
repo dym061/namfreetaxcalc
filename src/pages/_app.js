@@ -18,6 +18,7 @@ export default function App({ Component, pageProps }) {
         <meta property="og:image" content="https://namfreetaxcalc.vercel.app/_next/image?url=%2Fflag.png&w=128&q=75" />
         <meta property="og:image:alt" content="Namibia Free Tax Calculator logo" />
         <meta property="og:site_name" content="Namibia Free Tax Calculator" />
+		<meta name="google-site-verification" content="pbmvfp3qV_qMi9Ig-f-uBZjgnkpnjZVHjG6jUDUovUI" />
         <link rel="canonical" href="https://namfreetaxcalc.vercel.app" />
 		<link rel="alternate" hrefLang="en-us" href="https://namfreetaxcalc.vercel.app" />
 		<link rel="alternate" hrefLang="x-default" href="https://namfreetaxcalc.vercel.app"/>
