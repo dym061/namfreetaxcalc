@@ -179,6 +179,7 @@ export default function Home() {
 								value={amount}
 								onChange={(e) => setAmount(e.target.value)}
 								className="border border1 bordercol1 mr1 p2 mxauto txtcenter txtfont2"
+								min="0"
 							/>
 						</div>
 						<div className="dflex">
@@ -262,4 +263,3 @@ export default function Home() {
 	);
 	
 }
-
