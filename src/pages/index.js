@@ -255,7 +255,7 @@ export default function Home() {
 						</div>
 					</div>
 					<div className="txtcenter txtfont2">
-					<span className="txtfont1">&#169; {year} <a href="https://www.facebook.com/ciestomedia" target="_blank" >Ciesto Media &amp; Design</a>  </span>
+					<span className="txtfont1">&#169; {year} <a href="https://www.facebook.com/ciestomedia" target="_blank" >CiestoMedia</a>  </span>
 					</div>
 				</footer>
 			</div>
