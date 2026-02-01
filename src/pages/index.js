@@ -238,9 +238,6 @@ export default function Home() {
             </div>
             <h1 className="txtbold h4 txtfont2 txtcenter">Namibia Tax Calculator 2025/26</h1>
             <p className="h5 txtfont1 txtcenter">Calculate your monthly salary or business tax estimate.</p>
-            <p className="txtcenter txtfont1">
-              Last updated: {lastUpdatedDisplay} · Reviewed by Ciesto Media &amp; Design
-            </p>
             <div className="toggle-group">
               <button
                 type="button"
@@ -261,7 +258,7 @@ export default function Home() {
             {viewMode === 'individual' ? (
               <>
                 <section className="section" aria-labelledby="monthly-salary-heading">
-                  <h2 className="section-title" id="monthly-salary-heading">
+                  <h2 className="section-title txtcenter" id="monthly-salary-heading">
                     Monthly Salary (N$)
                   </h2>
                   <div className="dflex">
