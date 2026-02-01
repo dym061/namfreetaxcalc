@@ -66,8 +66,8 @@
 
 .txtcenter {text-align: center;}
 
-.txtfont1 {font-family: font1;}
-.txtfont2 {font-family: font2;}
+.txtfont1 {font-family: var(--font-yantramanav), sans-serif;}
+.txtfont2 {font-family: var(--font-roboto), sans-serif;}
 
 .txtupper {text-transform: uppercase;}
 
@@ -82,7 +82,7 @@
   border: 1px solid #000000;
   background: #ffffff;
   padding: 10px 18px;
-  font-family: font2;
+  font-family: var(--font-roboto), sans-serif;
   cursor: pointer;
 }
 
@@ -151,7 +151,7 @@
   text-decoration: none;
   border: none;
   cursor: pointer;
-  font-family: font2;
+  font-family: var(--font-roboto), sans-serif;
 }
 
 .action-button.secondary {
@@ -164,6 +164,28 @@
   margin-left: 18px;
   display: grid;
   gap: 8px;
+}
+
+.tax-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+}
+
+.tax-table caption {
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.tax-table th,
+.tax-table td {
+  border: 1px solid #e2e2e2;
+  padding: 10px;
+  text-align: left;
+}
+
+.tax-table thead th {
+  background: #f5f5f5;
 }
 
 .status-good {

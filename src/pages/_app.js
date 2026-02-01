@@ -1,7 +1,30 @@
-import '@/styles/globals.css'
-import '@/styles/style.css'
+import '@/styles/globals.css';
+import '@/styles/style.css';
 import Head from 'next/head';
 import Script from 'next/script';
+import { Roboto, Yantramanav } from 'next/font/google';
+
+const roboto = Roboto({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  variable: '--font-roboto',
+  display: 'swap',
+});
+
+const yantramanav = Yantramanav({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '700'],
+  variable: '--font-yantramanav',
+  display: 'swap',
+});
+
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Ciesto Media & Design',
+  url: 'https://www.facebook.com/ciestomedia',
+  sameAs: ['https://www.facebook.com/ciestomedia'],
+};
 
 export default function App({ Component, pageProps }) {
   return (
@@ -23,7 +46,7 @@ export default function App({ Component, pageProps }) {
         <title>Namibia Tax Calculator 2025 | NamFreeTaxCalc</title>
         <meta
           name="description"
-          content="Namibia Tax Calculator 2025/26: estimate PAYE, SSC, fringe benefits, and corporate tax with updated Namibian tax brackets."
+          content="Namibia Tax Calculator 2025: The tax-free threshold is N$100,000. Calculate PAYE, SSC (0.9%), and Corporate Tax (30%) instantly."
         />
         <meta
           name="keywords"
@@ -43,11 +66,18 @@ export default function App({ Component, pageProps }) {
         <meta property="og:site_name" content="Namibia Tax Calculator 2025" />
         <meta name="google-site-verification" content="pbmvfp3qV_qMi9Ig-f-uBZjgnkpnjZVHjG6jUDUovUI" />
         <link rel="canonical" href="https://namfreetaxcalc.vercel.app" />
-        <link rel="alternate" hrefLang="en-us" href="https://namfreetaxcalc.vercel.app" />
+        <link rel="alternate" hrefLang="en-US" href="https://namfreetaxcalc.vercel.app" />
+        <link rel="alternate" hrefLang="en-NA" href="https://namfreetaxcalc.vercel.app" />
         <link rel="alternate" hrefLang="x-default" href="https://namfreetaxcalc.vercel.app" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
       </Head>
 
-      <Component {...pageProps} />
+      <div className={`${roboto.variable} ${yantramanav.variable}`}>
+        <Component {...pageProps} />
+      </div>
     </>
   );
 }
