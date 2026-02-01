@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import Head from 'next/head';
 import Image from 'next/image';
 import {
   FacebookShareButton,
@@ -13,253 +14,445 @@ import {
   LinkedinIcon,
 } from 'next-share';
 
+const formatCurrency = (value) => {
+  const numberValue = Number.isFinite(value) ? value : 0;
+  return new Intl.NumberFormat('en-NA', {
+    style: 'currency',
+    currency: 'NAD',
+    minimumFractionDigits: 2,
+  }).format(numberValue);
+};
+
+const parseAmount = (value) => {
+  const parsed = parseFloat(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+};
+
+const calculateTax2025 = (annualIncome) => {
+  if (annualIncome <= 100000) {
+    return 0;
+  }
+  if (annualIncome <= 150000) {
+    return (annualIncome - 100000) * 0.18;
+  }
+  if (annualIncome <= 350000) {
+    return (annualIncome - 150000) * 0.25 + 9000;
+  }
+  if (annualIncome <= 550000) {
+    return (annualIncome - 350000) * 0.28 + 59000;
+  }
+  if (annualIncome <= 850000) {
+    return (annualIncome - 550000) * 0.3 + 115000;
+  }
+  if (annualIncome <= 1550000) {
+    return (annualIncome - 850000) * 0.32 + 205000;
+  }
+  return (annualIncome - 1550000) * 0.37 + 429000;
+};
+
+const calculateTax2023 = (annualIncome) => {
+  if (annualIncome <= 50000) {
+    return 0;
+  }
+  if (annualIncome <= 100000) {
+    return (annualIncome - 50000) * 0.18;
+  }
+  if (annualIncome <= 300000) {
+    return (annualIncome - 100000) * 0.25 + 9000;
+  }
+  if (annualIncome <= 500000) {
+    return (annualIncome - 300000) * 0.28 + 59000;
+  }
+  if (annualIncome <= 800000) {
+    return (annualIncome - 500000) * 0.3 + 115000;
+  }
+  if (annualIncome <= 1500000) {
+    return (annualIncome - 800000) * 0.32 + 205000;
+  }
+  return (annualIncome - 1500000) * 0.37 + 429000;
+};
+
+const buildBreakdown = (annualTax) => ({
+  annual: formatCurrency(annualTax),
+  biannual: formatCurrency(annualTax / 2),
+  quarterly: formatCurrency(annualTax / 4),
+  monthly: formatCurrency(annualTax / 12),
+});
+
 export default function Home() {
-	
-	const [amount, setAmount] = useState(0);
-	const [yearly, setYearly] = useState(0);
-	const [response, setResponse] = useState(0);
-	const [biannual, setBiannual] = useState(0);
-	const [quarterly, setQuarterly] = useState(0);
-	const [monthly, setMonthly] = useState(0);
+  const [amount, setAmount] = useState(0);
+  const [carCost, setCarCost] = useState('');
+  const [housingAllowance, setHousingAllowance] = useState('');
+  const [businessProfit, setBusinessProfit] = useState('');
+  const [businessTurnover, setBusinessTurnover] = useState('');
+  const [viewMode, setViewMode] = useState('individual');
 
+  useEffect(() => {
+    const handleWheel = (event) => {
+      if (event.target.type === 'range') {
+        event.preventDefault();
+      }
+    };
 
-	useEffect(() => {
-		const amountNum = parseFloat(amount);
+    document.body.addEventListener('wheel', handleWheel, { passive: false });
 
-		if (amountNum > 0 && amountNum !== '') {
-			setYearly(amountNum * 12)
-		}
-		else
-			setYearly(0)
-	}, [amount]);
+    return () => {
+      document.body.removeEventListener('wheel', handleWheel);
+    };
+  }, []);
 
-	useEffect(() => {
-		switch (true) {
-			case yearly <= 50000:
-				setResponse('Not taxable');
-				setBiannual('Not taxable');
-				setQuarterly('Not taxable');
-				setMonthly('Not taxable');
-			
-				break;
+  const handleSliderChange = (event) => {
+    setAmount(Number(event.target.value));
+  };
 
-			case yearly > 50001 && yearly < 100000:
-				const yearlyTax1 = (yearly - 50000) * (18 / 100);
-				const biannual1 = (yearlyTax1 / 2).toFixed(0);
-				const quarterly1 = (yearlyTax1 / 4).toFixed(0);
-				const monthtly1 = (yearlyTax1 / 12).toFixed(0);
-				setResponse(`N$ ${yearlyTax1}`);
-				setBiannual(`N$ ${biannual1}`);
-				setQuarterly(`N$ ${quarterly1}`);
-				setMonthly(`N$ ${monthtly1}`);
-				break;
+  const handleReset = () => {
+    setAmount(0);
+    setCarCost('');
+    setHousingAllowance('');
+  };
 
-			case yearly >= 100001 && yearly <= 300000:
-				const yearlyTax2 = (yearly - 100000) * (25 / 100) + 9000;
-				const biannual2 = (yearlyTax2 / 2).toFixed(0);
-				const quarterly2 = (yearlyTax2 / 4).toFixed(0);
-				const monthtly2 = (yearlyTax2 / 12).toFixed(0);
-				setResponse(`N$ ${yearlyTax2}`);
-				setBiannual(`N$ ${biannual2}`);
-				setQuarterly(`N$ ${quarterly2}`);
-				setMonthly(`N$ ${monthtly2}`);
-				break;
+  const handleSliderWheel = (event) => {
+    const currentValue = parseAmount(amount);
+    const newValue = currentValue + (event.deltaY > 0 ? -1000 : 1000);
 
-			case yearly >= 300001 && yearly <= 500000:
-				const yearlyTax3 = (yearly - 300000) * (28 / 100) + 59000;
-				const biannual3 = (yearlyTax3 / 2).toFixed(0);	
-				const quarterly3 = (yearlyTax3 / 4).toFixed(0);
-				const monthtly3 = (yearlyTax3 / 12).toFixed(0);
-				setResponse(`N$ ${yearlyTax3}`);
-				setBiannual(`N$ ${biannual3}`);
-				setQuarterly(`N$ ${quarterly3}`);	
-				setMonthly(`N$ ${monthtly3}`);				
-				break;
+    if (newValue >= 0 && newValue <= 250000) {
+      setAmount(newValue);
+    }
+  };
 
-			case yearly >= 500001 && yearly <= 800000:
-				const yearlyTax4 = (yearly - 500000) * (30 / 100) + 115000;
-				const biannual4 = (yearlyTax4 / 2).toFixed(0);
-				const quarterly4 = (yearlyTax4 / 4).toFixed(0);
-				const monthtly4 = (yearlyTax4 / 12).toFixed(0);
-				setResponse(`N$ ${yearlyTax4}`);
-				setBiannual(`N$ ${biannual4}`);
-				setQuarterly(`N$ ${quarterly4}`);
-				setMonthly(`N$ ${monthtly4}`);				
-				break;
+  const shareUrl = 'https://namfreetaxcalc.vercel.app';
 
-			case yearly >= 800001 && yearly <= 1500000:
-				const yearlyTax5 = (yearly - 800000) * (32 / 100) + 205000;
-				const biannual5 = (yearlyTax5 / 2).toFixed(0);
-				const quarterly5 = (yearlyTax5 / 4).toFixed(0);
-				const monthtly5 = (yearlyTax5 / 12).toFixed(0);
-				setResponse(`N$ ${yearlyTax5}`);
-				setBiannual(`N$ ${biannual5}`);
-				setQuarterly(`N$ ${quarterly5}`);		
-				setMonthly(`N$ ${monthtly5}`);				
-				break;
+  const today = new Date();
+  const year = today.getFullYear();
 
-			case yearly >= 1500000:
-				const yearlyTax6 = (yearly - 1500000) * (37 / 100) + 429000;
-				const biannual6 = (yearlyTax6 / 2).toFixed(0);	
-				const quarterly6 = (yearlyTax6 / 4).toFixed(0);
-				const monthtly6 = (yearlyTax6 / 12).toFixed(0);
-				setResponse(`N$ ${yearlyTax6}`);
-				setBiannual(`N$ ${biannual6}`);
-				setQuarterly(`N$ ${quarterly6}`);	
-				setMonthly(`N$ ${monthtly6}`);
-				break;
+  const monthlySalary = parseAmount(amount);
+  const annualBaseSalary = monthlySalary * 12;
+  const carCostValue = parseAmount(carCost);
+  const housingAllowanceValue = parseAmount(housingAllowance);
+  const carBenefitMonthly = carCostValue * 0.015;
+  const taxableMonthlyIncome = monthlySalary + carBenefitMonthly + housingAllowanceValue;
+  const taxableAnnualIncome = taxableMonthlyIncome * 12;
 
-			default:
-				setResponse('No idea');
-				setBiannual('No idea');
-				setQuarterly('No idea');
-				setMonthly('No idea');
-				break;
-		}
-		
-	}, [yearly]);
-	
-    const handleSliderChange = (event) => {
-      setAmount(event.target.value);
-    };	
-	
-	const handleReset = () => {
-		setAmount(0);
-		setYearly(0);
-		setResponse('Not taxable');
-		setBiannual('Not taxable');
-		setQuarterly('Not taxable');
-		setMonthly('Not taxable');
-	};		
-	
-	const handleSliderWheel = (event) => {
-		
-	  const currentValue = parseInt(amount);
-	  const newValue = currentValue + (event.deltaY > 0 ? -1000 : 1000);
+  const newAnnualTax = calculateTax2025(taxableAnnualIncome);
+  const oldAnnualTax = calculateTax2023(taxableAnnualIncome);
+  const newBreakdown = buildBreakdown(newAnnualTax);
+  const oldBreakdown = buildBreakdown(oldAnnualTax);
+  const taxSavings = oldAnnualTax - newAnnualTax;
 
-	  if (newValue >= 0 && newValue <= 250000) {
-		setAmount(newValue.toString());
-	  }
-	};
+  const sscEmployee = Math.min(taxableMonthlyIncome * 0.009, 99);
+  const sscEmployer = Math.min(taxableMonthlyIncome * 0.009, 99);
 
-	useEffect(() => {
-	  const handleWheel = (event) => {
-		if (event.target.type === 'range') {
-		  event.preventDefault();
-		}
-	  };
+  const whatsappMessage = useMemo(() => {
+    return [
+      'Namibia Tax Calculator 2025/26 Summary',
+      `Monthly Salary: ${formatCurrency(monthlySalary)}`,
+      `Taxable Annual Income: ${formatCurrency(taxableAnnualIncome)}`,
+      `New Annual Tax (2025/26): ${formatCurrency(newAnnualTax)}`,
+      `Old Annual Tax (2023): ${formatCurrency(oldAnnualTax)}`,
+      `Estimated Savings: ${formatCurrency(taxSavings)}`,
+      'Generated by NamFreeTaxCalc',
+    ].join('\n');
+  }, [monthlySalary, taxableAnnualIncome, newAnnualTax, oldAnnualTax, taxSavings]);
 
-	  document.body.addEventListener('wheel', handleWheel, { passive: false });
+  const whatsappLink = `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;
 
-	  return () => {
-		document.body.removeEventListener('wheel', handleWheel);
-	  };
-	}, []);	
-		
-	const shareUrl = "https://namfreetaxcalc.vercel.app"
-	
-	const today = new Date()
-	const year = today.getFullYear();	
-	
-	return (
-		<>
-			<section className="dflex">
-				<div className="con dflex shadow1 ">
-					<div className="mxauto mb3 p2">
-						<div className="dflex p2">
-							<Image width={100} height={65} src="/flag.png" alt="Namibian Flag" className="mxauto shadow1" />
-						</div>
-						<h1 className="txtbold h4 txtfont2 txtcenter">Namibia Free Tax Calculator</h1>
-						<p className="h5 txtfont1 txtcenter">Type your Monthly Salary / Estimate:</p>
-						<div className="dflex">
-							<input
-								type="number"
-								step="500"
-								name="amount"
-								value={amount}
-								onChange={(e) => setAmount(e.target.value)}
-								className="border border1 bordercol1 mr1 p2 mxauto txtcenter txtfont2"
-								min="0"
-							/>
-						</div>
-						<div className="dflex">
-							<input
-								type="range"
-								min="0"
-								max="250000"
-								step="50"
-								value={amount}
-								onChange={handleSliderChange}
-								onWheel={handleSliderWheel}
-								className="border border1 bordercol1 mr1 p2 mxauto txtcenter txtfont2"
-							/>
-						</div>					
-						<div className="result-container txtfont2">
-							<p className="txtcenter">Annual Salary: N$ {yearly}</p>
-							<p className="txtbold txtcenter">Annual Tax Payable: {response}</p>
-							<p className="txtcenter">Bi-Annual Tax Payable: {biannual}</p>
-							<p className="txtcenter">Quarterly Tax Payable: {quarterly}</p>
-							<p className="txtcenter">Monthly: {monthly}</p>
-						</div>
-						<div className="dflex pb3">
-							<Image 
-								width={35} 
-								height={35} 
-								src="/rotate-right-solid.png" 
-								alt="Reset Button" 
-								className="mxauto mt3 fillblue" 
-								onClick={handleReset}
-							/>
-						</div>
-						<hr/>
-						<div className="txtcenter txtfont2 p3">
-							<p className="pb3 ">Introducing the Namibia Free Tax Calculator! Easily and instantly calculate your annual tax payable based on your monthly salary/estimate. This free-to-use user-friendly calculator is designed to help you estimate your taxes and make informed decisions about your finances. Simply input your monthly salary/estimate and let the calculator do the rest. Our easy-to-read results will show your annual salary and tax payable, as well as bi-annual, quarterly, and monthly tax payable amounts. Reset the calculator at any time to start over, and use the slider to adjust your monthly salary/estimate. This tool is perfect for anyone who wants to estimate their taxes quickly and accurately. Try it out today and take control of your finances!</p>
-							<p className="txtbold pb3">The Namibia Free Tax Calculator uses the following information to provide its results:</p>
-							<p>N$ 0 - 50 000 : Not taxable</p>
-							<p>N$ 50 001 - 100 000 : 18% for each N$ above 50 000</p>
-							<p>N$ 100 001 - 300 000 : N$ 9 000 + 25% for each N$ above N$ 100 000</p>
-							<p>N$ 300 001 - 500 000 : N$ 59 000 + 28% for each N$ above N$ 300 000</p>
-							<p>N$ 500 001 - 800 000 : N$ 115 000 + 30% for each N$ above N$ 500 000</p>
-							<p>N$ 800 001 - 1 500 000 : N$ 205 000 + 32% for each N$ above N$ 800 000</p>
-							<p>Above N$ 1 500 000 : N$ 429 000 + 37% for each N$ above N$ 1 500 000</p>
-						</div>
-						
-					</div>
-				</div>
-			</section>
-			<div className="con2">
-				<footer className="con footer">
-					<div className="dflex">
-						<div className=" txtcenter mxauto">
-						  <p className=" txtbold txtfont2">Share</p>
-						  <FacebookShareButton
-							url={shareUrl} >
-							<FacebookIcon size={32} round />
-						  </FacebookShareButton>
-						  <PinterestShareButton
-							url={shareUrl} >
-							<PinterestIcon size={32} round />
-						  </PinterestShareButton>
-						  <RedditShareButton
-							url={shareUrl} >
-							<RedditIcon size={32} round />
-						  </RedditShareButton>
-						  <WhatsappShareButton
-							url={shareUrl} >
-							<WhatsappIcon size={32} round />
-						  </WhatsappShareButton>
-						  <LinkedinShareButton
-							url={shareUrl} >
-							<LinkedinIcon size={32} round />
-						  </LinkedinShareButton>
-						</div>
-					</div>
-					<div className="txtcenter txtfont2">
-					<span className="txtfont1">&#169; {year} <a href="https://www.facebook.com/ciestomedia" target="_blank" >CiestoMedia</a>  </span>
-					</div>
-				</footer>
-			</div>
-		</>
-	);
-	
+  const corporateProfitValue = parseAmount(businessProfit);
+  const corporateTurnoverValue = parseAmount(businessTurnover);
+  const corporateTax = corporateProfitValue * 0.3;
+  const vatRequired = corporateTurnoverValue >= 1000000;
+
+  const handlePrint = () => {
+    if (typeof window !== 'undefined') {
+      window.print();
+    }
+  };
+
+  return (
+    <>
+      <Head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'SoftwareApplication',
+              name: 'Namibia Tax Calculator 2025/26',
+              applicationCategory: 'FinanceApplication',
+              operatingSystem: 'Web',
+              offers: {
+                '@type': 'Offer',
+                price: '0',
+                priceCurrency: 'NAD',
+              },
+              targetCountry: 'NA',
+              url: 'https://namfreetaxcalc.vercel.app',
+            }),
+          }}
+        />
+      </Head>
+      <section className="dflex">
+        <div className="con dflex shadow1 ">
+          <div className="mxauto mb3 p2 content">
+            <div className="dflex p2">
+              <Image width={100} height={65} src="/flag.png" alt="Namibian Flag" className="mxauto shadow1" />
+            </div>
+            <h1 className="txtbold h4 txtfont2 txtcenter">Namibia Tax Calculator 2025/26</h1>
+            <p className="h5 txtfont1 txtcenter">Calculate your monthly salary or business tax estimate.</p>
+            <div className="toggle-group">
+              <button
+                type="button"
+                className={`toggle-button ${viewMode === 'individual' ? 'toggle-active' : ''}`}
+                onClick={() => setViewMode('individual')}
+              >
+                Individual
+              </button>
+              <button
+                type="button"
+                className={`toggle-button ${viewMode === 'business' ? 'toggle-active' : ''}`}
+                onClick={() => setViewMode('business')}
+              >
+                Business
+              </button>
+            </div>
+
+            {viewMode === 'individual' ? (
+              <>
+                <div className="section">
+                  <p className="section-title">Monthly Salary (N$)</p>
+                  <div className="dflex">
+                    <input
+                      type="number"
+                      step="500"
+                      name="amount"
+                      value={amount}
+                      onChange={(event) => setAmount(event.target.value)}
+                      className="border border1 bordercol1 mr1 p2 mxauto txtcenter txtfont2"
+                      min="0"
+                    />
+                  </div>
+                  <div className="dflex">
+                    <input
+                      type="range"
+                      min="0"
+                      max="250000"
+                      step="50"
+                      value={amount}
+                      onChange={handleSliderChange}
+                      onWheel={handleSliderWheel}
+                      className="border border1 bordercol1 mr1 p2 mxauto txtcenter txtfont2"
+                    />
+                  </div>
+                </div>
+
+                <div className="section card">
+                  <p className="section-title">Fringe Benefit Calculator (Namibian)</p>
+                  <p className="section-subtitle">Company Car (1.5% of cost price) & Housing Allowance</p>
+                  <div className="grid">
+                    <label className="field">
+                      Company Car Cost Price (N$)
+                      <input
+                        type="number"
+                        value={carCost}
+                        onChange={(event) => setCarCost(event.target.value)}
+                        className="border border1 bordercol1 p2 txtcenter txtfont2"
+                        min="0"
+                      />
+                    </label>
+                    <label className="field">
+                      Housing Allowance (Monthly N$)
+                      <input
+                        type="number"
+                        value={housingAllowance}
+                        onChange={(event) => setHousingAllowance(event.target.value)}
+                        className="border border1 bordercol1 p2 txtcenter txtfont2"
+                        min="0"
+                      />
+                    </label>
+                  </div>
+                  <div className="summary">
+                    <p>Company Car Benefit (Monthly): {formatCurrency(carBenefitMonthly)}</p>
+                    <p>Housing Allowance (Monthly): {formatCurrency(housingAllowanceValue)}</p>
+                    <p className="txtbold">Taxable Monthly Income (incl. benefits): {formatCurrency(taxableMonthlyIncome)}</p>
+                  </div>
+                </div>
+
+                <div className="result-container txtfont2">
+                  <p className="txtcenter">Annual Base Salary: {formatCurrency(annualBaseSalary)}</p>
+                  <p className="txtcenter">Taxable Annual Income (incl. benefits): {formatCurrency(taxableAnnualIncome)}</p>
+                  <p className="txtbold txtcenter">Annual Tax Payable (2025/26): {newBreakdown.annual}</p>
+                  <p className="txtcenter">Bi-Annual Tax Payable: {newBreakdown.biannual}</p>
+                  <p className="txtcenter">Quarterly Tax Payable: {newBreakdown.quarterly}</p>
+                  <p className="txtcenter">Monthly Tax Payable: {newBreakdown.monthly}</p>
+                </div>
+
+                <div className="section card">
+                  <p className="section-title">Side-by-Side Comparison</p>
+                  <div className="comparison">
+                    <div>
+                      <p className="txtbold">Old Tax (2023)</p>
+                      <p>Annual: {oldBreakdown.annual}</p>
+                      <p>Monthly: {oldBreakdown.monthly}</p>
+                    </div>
+                    <div>
+                      <p className="txtbold">New Tax (2025/26)</p>
+                      <p>Annual: {newBreakdown.annual}</p>
+                      <p>Monthly: {newBreakdown.monthly}</p>
+                    </div>
+                    <div>
+                      <p className="txtbold">Estimated Savings</p>
+                      <p>Annual: {formatCurrency(taxSavings)}</p>
+                      <p>Monthly: {formatCurrency(taxSavings / 12)}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="section card">
+                  <p className="section-title">Social Security (SSC)</p>
+                  <p>Employee Contribution (0.9%, capped at N$99): {formatCurrency(sscEmployee)}</p>
+                  <p>Employer Contribution (0.9%, capped at N$99): {formatCurrency(sscEmployer)}</p>
+                </div>
+
+                <div className="section actions">
+                  <button type="button" className="action-button" onClick={handlePrint}>
+                    Download Salary Breakdown (PDF)
+                  </button>
+                  <a className="action-button secondary" href={whatsappLink} target="_blank" rel="noreferrer">
+                    Share to WhatsApp
+                  </a>
+                </div>
+
+                <div className="dflex pb3">
+                  <Image
+                    width={35}
+                    height={35}
+                    src="/rotate-right-solid.png"
+                    alt="Reset Button"
+                    className="mxauto mt3 fillblue"
+                    onClick={handleReset}
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="section card">
+                  <p className="section-title">Corporate Tax & VAT Calculator</p>
+                  <p className="section-subtitle">Non-mining corporate tax rate: 30% (2025)</p>
+                  <div className="grid">
+                    <label className="field">
+                      Annual Taxable Profit (N$)
+                      <input
+                        type="number"
+                        value={businessProfit}
+                        onChange={(event) => setBusinessProfit(event.target.value)}
+                        className="border border1 bordercol1 p2 txtcenter txtfont2"
+                        min="0"
+                      />
+                    </label>
+                    <label className="field">
+                      Annual Turnover (N$)
+                      <input
+                        type="number"
+                        value={businessTurnover}
+                        onChange={(event) => setBusinessTurnover(event.target.value)}
+                        className="border border1 bordercol1 p2 txtcenter txtfont2"
+                        min="0"
+                      />
+                    </label>
+                  </div>
+                  <div className="summary">
+                    <p className="txtbold">Corporate Tax Payable: {formatCurrency(corporateTax)}</p>
+                    <p>VAT Registration Threshold: {formatCurrency(1000000)}</p>
+                    <p className={vatRequired ? 'status-good' : 'status-muted'}>
+                      {vatRequired
+                        ? 'VAT registration required based on turnover.'
+                        : 'VAT registration not yet required based on turnover.'}
+                    </p>
+                  </div>
+                </div>
+              </>
+            )}
+
+            <hr />
+            <div className="txtcenter txtfont2 p3">
+              <p className="pb3">
+                Introducing the Namibia Tax Calculator 2025/26. Quickly estimate PAYE, fringe benefits, and business tax
+                obligations using the latest Namibian tax thresholds from the PwC Tax Reference Card.
+              </p>
+              <p className="txtbold pb3">2025/26 Individual Income Tax Brackets:</p>
+              <p>N$ 0 - 100 000 : 0% (Tax free threshold)</p>
+              <p>N$ 100 001 - 150 000 : 18% of amount over N$ 100 000</p>
+              <p>N$ 150 001 - 350 000 : N$ 9 000 + 25% of amount over N$ 150 000</p>
+              <p>N$ 350 001 - 550 000 : N$ 59 000 + 28% of amount over N$ 350 000</p>
+              <p>N$ 550 001 - 850 000 : N$ 115 000 + 30% of amount over N$ 550 000</p>
+              <p>N$ 850 001 - 1 550 000 : N$ 205 000 + 32% of amount over N$ 850 000</p>
+              <p>Above N$ 1 550 000 : N$ 429 000 + 37% of amount over N$ 1 550 000</p>
+              <p className="txtbold pb3 mt3">Business Updates:</p>
+              <p>Corporate tax for non-mining companies: 30% (from 1 Jan 2025)</p>
+              <p>VAT registration threshold: N$ 1 000 000 annual turnover</p>
+            </div>
+
+            <div className="section card">
+              <p className="section-title">NamRA Tax Calendar Notifications</p>
+              <ul className="calendar">
+                <li>30 June: Individual income tax return deadline.</li>
+                <li>Monthly (20th): PAYE remittance to NamRA.</li>
+                <li>Bi-monthly (last day): VAT return submission for registered vendors.</li>
+              </ul>
+            </div>
+
+            <div className="section card">
+              <p className="section-title">NamRA Integration Links</p>
+              <p>
+                File directly on the{' '}
+                <a href="https://itas.mof.gov.na" target="_blank" rel="noreferrer">
+                  NamRA ITAS portal
+                </a>{' '}
+                or read the{' '}
+                <a
+                  href="https://itas.mof.gov.na/Account/Register"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  ITAS registration guide
+                </a>
+                .
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div className="con2">
+        <footer className="con footer">
+          <div className="dflex">
+            <div className=" txtcenter mxauto">
+              <p className=" txtbold txtfont2">Share</p>
+              <FacebookShareButton url={shareUrl}>
+                <FacebookIcon size={32} round />
+              </FacebookShareButton>
+              <PinterestShareButton url={shareUrl}>
+                <PinterestIcon size={32} round />
+              </PinterestShareButton>
+              <RedditShareButton url={shareUrl}>
+                <RedditIcon size={32} round />
+              </RedditShareButton>
+              <WhatsappShareButton url={shareUrl}>
+                <WhatsappIcon size={32} round />
+              </WhatsappShareButton>
+              <LinkedinShareButton url={shareUrl}>
+                <LinkedinIcon size={32} round />
+              </LinkedinShareButton>
+            </div>
+          </div>
+          <div className="txtcenter txtfont2">
+            <p className="footer-disclaimer">
+              Based on the 2025 PwC Tax Rate Card. Consult a professional for official filing.
+            </p>
+            <span className="txtfont1">
+              &#169; {year} <a href="https://www.facebook.com/ciestomedia" target="_blank" rel="noreferrer">CiestoMedia</a>
+            </span>
+          </div>
+        </footer>
+      </div>
+    </>
+  );
 }

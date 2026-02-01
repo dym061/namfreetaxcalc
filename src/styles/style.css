@@ -7,14 +7,18 @@
 .con {
   width: 1200px;
   max-width: 100%;
-  
+
   margin-left: auto;
   margin-right: auto;
   box-sizing: border-box;
   scrollbar-gutter: stable both-edges;}
-  
+
  .con2 {
   position: relative;
+}
+
+.content {
+  width: 100%;
 }
 
 .dflex {display: flex;}
@@ -29,6 +33,11 @@
   color: #000000;
   padding: 10px;
   text-align: center;
+}
+
+.footer-disclaimer {
+  font-size: 14px;
+  margin-bottom: 8px;
 }
 
 .h4 {font-size: 45px;}
@@ -62,9 +71,115 @@
 
 .txtupper {text-transform: uppercase;}
 
-@media screen and (max-width: 768px) 
+.toggle-group {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.toggle-button {
+  border: 1px solid #000000;
+  background: #ffffff;
+  padding: 10px 18px;
+  font-family: font2;
+  cursor: pointer;
+}
+
+.toggle-active {
+  background: #000000;
+  color: #ffffff;
+}
+
+.section {
+  margin: 20px 0;
+}
+
+.section-title {
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.section-subtitle {
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.card {
+  border: 1px solid #e2e2e2;
+  padding: 20px;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.summary {
+  margin-top: 16px;
+  display: grid;
+  gap: 6px;
+}
+
+.comparison {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.action-button {
+  background: #000000;
+  color: #ffffff;
+  padding: 12px 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  font-family: font2;
+}
+
+.action-button.secondary {
+  background: #2abf5f;
+}
+
+.calendar {
+  list-style: disc;
+  text-align: left;
+  margin-left: 18px;
+  display: grid;
+  gap: 8px;
+}
+
+.status-good {
+  color: #1a7f37;
+  font-weight: 600;
+}
+
+.status-muted {
+  color: #555555;
+}
+
+@media screen and (max-width: 768px)
  {
 	.h4 {font-size: 30px;}
 	.h5 {font-size: 25px;}
 	.shadow1 {box-shadow:none}
+	.toggle-group {flex-direction: column;}
+	.actions {flex-direction: column;}
  }
