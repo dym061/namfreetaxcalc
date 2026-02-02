@@ -79,6 +79,39 @@ const buildBreakdown = (annualTax) => ({
   monthly: formatCurrency(annualTax / 12),
 });
 
+const META_TITLE = 'Namibia Tax Calculator 2025 | PAYE, Salary After Tax, Take Home Pay';
+const META_DESCRIPTION =
+  'Free Namibia tax calculator to estimate PAYE, salary after tax, and take home pay using Namibia tax brackets. Includes simple explanations and salary examples.';
+const CANONICAL_URL = 'https://namfreetaxcalc.vercel.app';
+
+const faqItems = [
+  {
+    question: 'How is PAYE calculated in Namibia?',
+    answer:
+      'PAYE is calculated by annualizing your taxable income, applying the Namibia tax brackets, and dividing the result back into monthly withholding. The calculator mirrors the official bands and rates, so the estimate reflects how PAYE is typically derived for employees. This helps you understand your likely deduction each month without manual tax table lookups.',
+  },
+  {
+    question: 'How do I calculate my take home pay in Namibia?',
+    answer:
+      'Start with your gross monthly salary and subtract the estimated monthly PAYE amount from the calculator. The remainder is your take home pay, before any additional deductions like medical aid or retirement contributions. This is a quick way to estimate net pay from your pay slip using the same logic as the tax bands.',
+  },
+  {
+    question: 'What are the Namibia tax brackets?',
+    answer:
+      'The Namibia tax brackets are tiered income bands with increasing rates, starting at a 0% threshold and rising as income grows. This calculator uses the 2025/26 rates and thresholds to keep results consistent with current guidance. Reviewing the brackets helps explain why PAYE increases as income rises.',
+  },
+  {
+    question: 'Is this a free Namibia tax calculator?',
+    answer:
+      'Yes. This is a free Namibia tax calculator designed to give fast estimates without sign-up or fees. It is a net salary calculator Namibia users can rely on for quick planning, with results displayed instantly. For formal filings, always verify figures with official sources.',
+  },
+  {
+    question: 'What is the difference between gross salary and net salary in Namibia?',
+    answer:
+      'Gross salary is your total pay before deductions, while net salary is what you receive after PAYE and other mandatory withholdings. The calculator shows a gross to net salary Namibia view by subtracting estimated tax from gross income. This helps you see the impact of PAYE on monthly cash flow.',
+  },
+];
+
 export default function Home() {
   const [amount, setAmount] = useState(0);
   const [carCost, setCarCost] = useState('');
@@ -120,16 +153,10 @@ export default function Home() {
     }
   };
 
-  const shareUrl = 'https://namfreetaxcalc.vercel.app';
+  const shareUrl = CANONICAL_URL;
 
   const today = new Date();
   const year = today.getFullYear();
-  const lastUpdatedDisplay = today.toLocaleDateString('en-NA', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-  const lastUpdatedIso = today.toISOString().split('T')[0];
 
   const monthlySalary = parseAmount(amount);
   const annualBaseSalary = monthlySalary * 12;
@@ -173,60 +200,68 @@ export default function Home() {
     }
   };
 
+  const salaryExamples = [
+    { label: 'N$10,000 monthly', monthlyGross: 10000 },
+    { label: 'N$20,000 monthly', monthlyGross: 20000 },
+    { label: 'N$30,000 monthly', monthlyGross: 30000 },
+    { label: 'N$50,000 monthly', monthlyGross: 50000 },
+  ].map((example) => {
+    const annualIncome = example.monthlyGross * 12;
+    const annualTax = calculateTax2025(annualIncome);
+    const monthlyTax = annualTax / 12;
+    const monthlyTakeHome = example.monthlyGross - monthlyTax;
+
+    return {
+      ...example,
+      monthlyTax,
+      monthlyTakeHome,
+    };
+  });
+
   return (
     <>
       <Head>
+        <title>{META_TITLE}</title>
+        <meta name="description" content={META_DESCRIPTION} />
+        <link rel="canonical" href={CANONICAL_URL} />
+        <meta property="og:title" content={META_TITLE} />
+        <meta property="og:description" content={META_DESCRIPTION} />
+        <meta property="og:url" content={CANONICAL_URL} />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content={`${CANONICAL_URL}/namtaxcalcimage.jpg`} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               '@context': 'https://schema.org',
-              '@graph': [
-                {
-                  '@type': 'SoftwareApplication',
-                  name: 'Namibia Tax Calculator 2025/26',
-                  applicationCategory: 'FinanceApplication',
-                  operatingSystem: 'Web',
-                  offers: {
-                    '@type': 'Offer',
-                    price: '0',
-                    priceCurrency: 'NAD',
-                  },
-                  featureList: 'PAYE Calculation, SSC Calculation, Corporate Tax',
-                  dateModified: lastUpdatedIso,
-                  targetCountry: 'NA',
-                  url: 'https://namfreetaxcalc.vercel.app',
+              '@type': 'FAQPage',
+              mainEntity: faqItems.map((item) => ({
+                '@type': 'Question',
+                name: item.question,
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: item.answer,
                 },
-                {
-                  '@type': 'FAQPage',
-                  mainEntity: [
-                    {
-                      '@type': 'Question',
-                      name: 'What is the tax threshold in Namibia for 2025?',
-                      acceptedAnswer: {
-                        '@type': 'Answer',
-                        text: 'For the 2025/2026 tax year, the tax-free threshold for individuals in Namibia is N$100,000 per year.',
-                      },
-                    },
-                    {
-                      '@type': 'Question',
-                      name: 'How much is the Social Security Commission (SSC) deduction?',
-                      acceptedAnswer: {
-                        '@type': 'Answer',
-                        text: 'The SSC deduction is 0.9% of monthly taxable income for employees, capped at N$99 per month.',
-                      },
-                    },
-                    {
-                      '@type': 'Question',
-                      name: 'What is the corporate tax rate in Namibia?',
-                      acceptedAnswer: {
-                        '@type': 'Answer',
-                        text: 'Effective January 1, 2025, the corporate tax rate for non-mining companies in Namibia is 30%.',
-                      },
-                    },
-                  ],
-                },
-              ],
+              })),
+            }),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'WebApplication',
+              name: 'Namibia Tax Calculator',
+              applicationCategory: 'FinanceApplication',
+              operatingSystem: 'All',
+              offers: {
+                '@type': 'Offer',
+                price: '0',
+                priceCurrency: 'NAD',
+              },
+              description: META_DESCRIPTION,
+              url: CANONICAL_URL,
             }),
           }}
         />
@@ -236,8 +271,11 @@ export default function Home() {
             <div className="dflex p2">
               <Image width={100} height={65} src="/flag.png" alt="Namibian Flag" className="mxauto shadow1" />
             </div>
-            <h1 className="txtbold h4 txtfont2 txtcenter">Namibia Tax Calculator 2025/26</h1>
-            <p className="h5 txtfont1 txtcenter">Calculate your monthly salary or business tax estimate.</p>
+            <h1 className="txtbold h4 txtfont2 txtcenter">Namibia Tax Calculator</h1>
+            <p className="h5 txtfont1 txtcenter">
+              Use this free Namibia tax calculator to estimate PAYE, salary after tax, and take home pay. Enter your
+              gross salary to see a clear breakdown based on Namibia tax brackets.
+            </p>
             <div className="toggle-group">
               <button
                 type="button"
@@ -430,91 +468,154 @@ export default function Home() {
               </>
             )}
 
-            <hr />
-            <section className="txtcenter txtfont2 p3" aria-labelledby="tax-brackets-heading">
-              <p className="pb3">
-                Introducing the Namibia Tax Calculator 2025/26. Quickly estimate PAYE, fringe benefits, and business tax
-                obligations using the latest Namibian tax thresholds from the PwC Tax Reference Card.
-              </p>
-              <h2 className="txtbold pb3" id="tax-brackets-heading">
-                2025/26 Individual Income Tax Brackets
+            <section className="section card" aria-labelledby="quick-answers-heading">
+              <h2 className="section-title" id="quick-answers-heading">
+                Quick answers
               </h2>
-              <table className="tax-table">
-                <caption className="txtbold pb3">Namibia 2025/26 PAYE brackets</caption>
-                <thead>
-                  <tr>
-                    <th scope="col">Annual taxable income (N$)</th>
-                    <th scope="col">Tax rate</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>N$ 0 - 100 000</td>
-                    <td>0% (Tax free threshold)</td>
-                  </tr>
-                  <tr>
-                    <td>N$ 100 001 - 150 000</td>
-                    <td>18% of amount over N$ 100 000</td>
-                  </tr>
-                  <tr>
-                    <td>N$ 150 001 - 350 000</td>
-                    <td>N$ 9 000 + 25% of amount over N$ 150 000</td>
-                  </tr>
-                  <tr>
-                    <td>N$ 350 001 - 550 000</td>
-                    <td>N$ 59 000 + 28% of amount over N$ 350 000</td>
-                  </tr>
-                  <tr>
-                    <td>N$ 550 001 - 850 000</td>
-                    <td>N$ 115 000 + 30% of amount over N$ 550 000</td>
-                  </tr>
-                  <tr>
-                    <td>N$ 850 001 - 1 550 000</td>
-                    <td>N$ 205 000 + 32% of amount over N$ 850 000</td>
-                  </tr>
-                  <tr>
-                    <td>Above N$ 1 550 000</td>
-                    <td>N$ 429 000 + 37% of amount over N$ 1 550 000</td>
-                  </tr>
-                </tbody>
-              </table>
+              <ul className="list">
+                <li>PAYE calculator Namibia; estimate what you owe</li>
+                <li>Salary after tax Namibia; see take home pay</li>
+                <li>Gross to net salary breakdown</li>
+                <li>Tax brackets used by this calculator</li>
+              </ul>
+            </section>
+
+            <section className="section card" aria-labelledby="paye-explainer-heading">
+              <h2 className="section-title" id="paye-explainer-heading">
+                How PAYE is calculated in Namibia
+              </h2>
+              <p className="section-body">
+                A PAYE calculation starts by converting your monthly income into an annual figure so the brackets can
+                be applied consistently. This Namibia PAYE calculation then works through each bracket, adding the
+                amounts owed in each band until your total taxable income is covered. The estimate reflects taxable
+                salary plus benefits like a company car or housing allowance because those items increase taxable pay.
+                If you are searching for “how much tax do I pay Namibia”, the calculator gives a fast estimate by
+                following the same tiered logic, returning the annual tax, and dividing it into a monthly figure for
+                payslips. It is designed for planning and comparisons, not for formal submission, but it helps you see
+                the impact of moving into higher bands.
+              </p>
+              <ul className="list">
+                <li>Start with gross salary to determine total taxable income.</li>
+                <li>Apply tax brackets and rates used by the calculator to each band.</li>
+                <li>The result is estimated tax and take home pay.</li>
+              </ul>
+              <p className="disclaimer">
+                This is an estimate; confirm final amounts with official guidance for your situation.
+              </p>
+            </section>
+
+            <section className="section card" aria-labelledby="salary-examples-heading">
+              <h2 className="section-title" id="salary-examples-heading">
+                Salary after tax examples in Namibia
+              </h2>
+              <p className="section-body">
+                These estimates show take home pay Namibia insights alongside salary after tax Namibia comparisons using
+                the same calculator logic.
+              </p>
+              <div className="example-grid">
+                {salaryExamples.map((example) => (
+                  <div className="card example-card" key={example.label}>
+                    <p className="txtbold">{example.label}</p>
+                    <p>Gross salary: {formatCurrency(example.monthlyGross)}</p>
+                    <p>Estimated PAYE: {formatCurrency(example.monthlyTax)}</p>
+                    <p>Estimated take home pay: {formatCurrency(example.monthlyTakeHome)}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section className="section card" aria-labelledby="tax-brackets-heading">
+              <h2 className="section-title" id="tax-brackets-heading">
+                Namibia tax brackets and tax table
+              </h2>
+              <p className="section-body">
+                The calculator applies the latest Namibian tax brackets to estimate your liability and explain how your
+                income moves through each band. Reviewing the table below helps you see how Namibian income tax rates
+                build progressively as earnings rise. This summary is a practical reference for planning because it
+                matches the calculation logic and shows the threshold where the tax rate changes.
+              </p>
+              <details className="accordion">
+                <summary className="accordion-summary">View the Namibia tax table</summary>
+                <p className="tax-year-label">Tax year used: 2025</p>
+                <table className="tax-table">
+                  <caption className="txtbold pb3">Namibia tax table for 2025/26 PAYE bands</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Annual taxable income (N$)</th>
+                      <th scope="col">Tax rate</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>N$ 0 - 100 000</td>
+                      <td>0% (Tax free threshold)</td>
+                    </tr>
+                    <tr>
+                      <td>N$ 100 001 - 150 000</td>
+                      <td>18% of amount over N$ 100 000</td>
+                    </tr>
+                    <tr>
+                      <td>N$ 150 001 - 350 000</td>
+                      <td>N$ 9 000 + 25% of amount over N$ 150 000</td>
+                    </tr>
+                    <tr>
+                      <td>N$ 350 001 - 550 000</td>
+                      <td>N$ 59 000 + 28% of amount over N$ 350 000</td>
+                    </tr>
+                    <tr>
+                      <td>N$ 550 001 - 850 000</td>
+                      <td>N$ 115 000 + 30% of amount over N$ 550 000</td>
+                    </tr>
+                    <tr>
+                      <td>N$ 850 001 - 1 550 000</td>
+                      <td>N$ 205 000 + 32% of amount over N$ 850 000</td>
+                    </tr>
+                    <tr>
+                      <td>Above N$ 1 550 000</td>
+                      <td>N$ 429 000 + 37% of amount over N$ 1 550 000</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </details>
               <h3 className="txtbold pb3 mt3">Business Updates</h3>
               <ul className="calendar">
                 <li>Corporate tax for non-mining companies: 30% (from 1 Jan 2025)</li>
                 <li>VAT registration threshold: N$ 1 000 000 annual turnover</li>
               </ul>
-            </section>
-
-            <section className="section card" aria-labelledby="tax-calendar-heading">
-              <h2 className="section-title" id="tax-calendar-heading">
-                NamRA Tax Calendar Notifications
-              </h2>
+              <h3 className="txtbold pb3 mt3">NamRA Tax Calendar Notifications</h3>
               <ul className="calendar">
                 <li>30 June: Individual income tax return deadline.</li>
                 <li>Monthly (20th): PAYE remittance to NamRA.</li>
                 <li>Bi-monthly (last day): VAT return submission for registered vendors.</li>
               </ul>
-            </section>
-
-            <section className="section card" aria-labelledby="namra-links-heading">
-              <h2 className="section-title" id="namra-links-heading">
-                NamRA Integration Links
-              </h2>
+              <h3 className="txtbold pb3 mt3">NamRA Integration Links</h3>
               <p>
                 File directly on the{' '}
                 <a href="https://itas.mof.gov.na" target="_blank" rel="noreferrer">
                   NamRA ITAS portal
                 </a>{' '}
                 or read the{' '}
-                <a
-                  href="https://itas.mof.gov.na/Account/Register"
-                  target="_blank"
-                  rel="noreferrer"
-                >
+                <a href="https://itas.mof.gov.na/Account/Register" target="_blank" rel="noreferrer">
                   ITAS registration guide
                 </a>
                 .
               </p>
+            </section>
+
+            <section className="section card" aria-labelledby="faq-heading">
+              <h2 className="section-title" id="faq-heading">
+                FAQ
+              </h2>
+              <div className="faq-list">
+                {faqItems.map((item) => (
+                  <details className="accordion" key={item.question}>
+                    <summary className="accordion-summary">
+                      <h3 className="faq-question">{item.question}</h3>
+                    </summary>
+                    <p className="faq-answer">{item.answer}</p>
+                  </details>
+                ))}
+              </div>
             </section>
         </div>
       </main>
@@ -552,6 +653,7 @@ export default function Home() {
               </a>
               .
             </p>
+            <p className="last-updated">Last updated: February 2, 2026</p>
             <span className="txtfont1">
               &#169; {year} <a href="https://www.facebook.com/ciestomedia" target="_blank" rel="noreferrer">CiestoMedia</a>
             </span>

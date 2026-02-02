@@ -166,6 +166,78 @@
   gap: 8px;
 }
 
+.list {
+  list-style: disc;
+  margin-left: 18px;
+  display: grid;
+  gap: 8px;
+}
+
+.section-body {
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+.disclaimer {
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.example-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.example-card {
+  background: #ffffff;
+}
+
+.accordion {
+  border: 1px solid #e2e2e2;
+  border-radius: 8px;
+  padding: 12px;
+  background: #ffffff;
+}
+
+.accordion + .accordion {
+  margin-top: 12px;
+}
+
+.accordion-summary {
+  cursor: pointer;
+  font-weight: 600;
+  list-style: none;
+}
+
+.accordion-summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-list {
+  display: grid;
+  gap: 12px;
+}
+
+.faq-question {
+  font-size: 16px;
+}
+
+.faq-answer {
+  margin-top: 10px;
+  line-height: 1.6;
+}
+
+.tax-year-label {
+  font-weight: 600;
+  margin: 12px 0 4px;
+}
+
+.last-updated {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
 .tax-table {
   width: 100%;
   border-collapse: collapse;
