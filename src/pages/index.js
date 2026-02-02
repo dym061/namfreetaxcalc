@@ -124,6 +124,12 @@ export default function Home() {
 
   const today = new Date();
   const year = today.getFullYear();
+  const lastUpdatedDisplay = today.toLocaleDateString('en-NA', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+  const lastUpdatedIso = today.toISOString().split('T')[0];
 
   const monthlySalary = parseAmount(amount);
   const annualBaseSalary = monthlySalary * 12;
@@ -175,24 +181,58 @@ export default function Home() {
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               '@context': 'https://schema.org',
-              '@type': 'SoftwareApplication',
-              name: 'Namibia Tax Calculator 2025/26',
-              applicationCategory: 'FinanceApplication',
-              operatingSystem: 'Web',
-              offers: {
-                '@type': 'Offer',
-                price: '0',
-                priceCurrency: 'NAD',
-              },
-              targetCountry: 'NA',
-              url: 'https://namfreetaxcalc.vercel.app',
+              '@graph': [
+                {
+                  '@type': 'SoftwareApplication',
+                  name: 'Namibia Tax Calculator 2025/26',
+                  applicationCategory: 'FinanceApplication',
+                  operatingSystem: 'Web',
+                  offers: {
+                    '@type': 'Offer',
+                    price: '0',
+                    priceCurrency: 'NAD',
+                  },
+                  featureList: 'PAYE Calculation, SSC Calculation, Corporate Tax',
+                  dateModified: lastUpdatedIso,
+                  targetCountry: 'NA',
+                  url: 'https://namfreetaxcalc.vercel.app',
+                },
+                {
+                  '@type': 'FAQPage',
+                  mainEntity: [
+                    {
+                      '@type': 'Question',
+                      name: 'What is the tax threshold in Namibia for 2025?',
+                      acceptedAnswer: {
+                        '@type': 'Answer',
+                        text: 'For the 2025/2026 tax year, the tax-free threshold for individuals in Namibia is N$100,000 per year.',
+                      },
+                    },
+                    {
+                      '@type': 'Question',
+                      name: 'How much is the Social Security Commission (SSC) deduction?',
+                      acceptedAnswer: {
+                        '@type': 'Answer',
+                        text: 'The SSC deduction is 0.9% of monthly taxable income for employees, capped at N$99 per month.',
+                      },
+                    },
+                    {
+                      '@type': 'Question',
+                      name: 'What is the corporate tax rate in Namibia?',
+                      acceptedAnswer: {
+                        '@type': 'Answer',
+                        text: 'Effective January 1, 2025, the corporate tax rate for non-mining companies in Namibia is 30%.',
+                      },
+                    },
+                  ],
+                },
+              ],
             }),
           }}
         />
       </Head>
-      <section className="dflex">
-        <div className="con dflex shadow1 ">
-          <div className="mxauto mb3 p2 content">
+      <main className="con dflex shadow1">
+        <div className="mxauto mb3 p2 content">
             <div className="dflex p2">
               <Image width={100} height={65} src="/flag.png" alt="Namibian Flag" className="mxauto shadow1" />
             </div>
@@ -217,10 +257,13 @@ export default function Home() {
 
             {viewMode === 'individual' ? (
               <>
-                <div className="section">
-                  <p className="section-title">Monthly Salary (N$)</p>
+                <section className="section" aria-labelledby="monthly-salary-heading">
+                  <h2 className="section-title txtcenter" id="monthly-salary-heading">
+                    Monthly Salary (N$)
+                  </h2>
                   <div className="dflex">
                     <input
+                      id="monthly-salary-input"
                       type="number"
                       step="500"
                       name="amount"
@@ -228,10 +271,12 @@ export default function Home() {
                       onChange={(event) => setAmount(event.target.value)}
                       className="border border1 bordercol1 mr1 p2 mxauto txtcenter txtfont2"
                       min="0"
+                      aria-label="Monthly salary amount"
                     />
                   </div>
                   <div className="dflex">
                     <input
+                      id="monthly-salary-range"
                       type="range"
                       min="0"
                       max="250000"
@@ -240,17 +285,21 @@ export default function Home() {
                       onChange={handleSliderChange}
                       onWheel={handleSliderWheel}
                       className="border border1 bordercol1 mr1 p2 mxauto txtcenter txtfont2"
+                      aria-label="Monthly salary slider"
                     />
                   </div>
-                </div>
+                </section>
 
-                <div className="section card">
-                  <p className="section-title">Fringe Benefit Calculator (Namibian)</p>
+                <section className="section card" aria-labelledby="fringe-benefits-heading">
+                  <h2 className="section-title" id="fringe-benefits-heading">
+                    Fringe Benefit Calculator (Namibian)
+                  </h2>
                   <p className="section-subtitle">Company Car (1.5% of cost price) & Housing Allowance</p>
                   <div className="grid">
-                    <label className="field">
+                    <label className="field" htmlFor="company-car-cost">
                       Company Car Cost Price (N$)
                       <input
+                        id="company-car-cost"
                         type="number"
                         value={carCost}
                         onChange={(event) => setCarCost(event.target.value)}
@@ -258,9 +307,10 @@ export default function Home() {
                         min="0"
                       />
                     </label>
-                    <label className="field">
+                    <label className="field" htmlFor="housing-allowance">
                       Housing Allowance (Monthly N$)
                       <input
+                        id="housing-allowance"
                         type="number"
                         value={housingAllowance}
                         onChange={(event) => setHousingAllowance(event.target.value)}
@@ -274,7 +324,7 @@ export default function Home() {
                     <p>Housing Allowance (Monthly): {formatCurrency(housingAllowanceValue)}</p>
                     <p className="txtbold">Taxable Monthly Income (incl. benefits): {formatCurrency(taxableMonthlyIncome)}</p>
                   </div>
-                </div>
+                </section>
 
                 <div className="result-container txtfont2">
                   <p className="txtcenter">Annual Base Salary: {formatCurrency(annualBaseSalary)}</p>
@@ -285,8 +335,10 @@ export default function Home() {
                   <p className="txtcenter">Monthly Tax Payable: {newBreakdown.monthly}</p>
                 </div>
 
-                <div className="section card">
-                  <p className="section-title">Side-by-Side Comparison</p>
+                <section className="section card" aria-labelledby="comparison-heading">
+                  <h2 className="section-title" id="comparison-heading">
+                    Side-by-Side Comparison
+                  </h2>
                   <div className="comparison">
                     <div>
                       <p className="txtbold">Old Tax (2023)</p>
@@ -304,22 +356,24 @@ export default function Home() {
                       <p>Monthly: {formatCurrency(taxSavings / 12)}</p>
                     </div>
                   </div>
-                </div>
+                </section>
 
-                <div className="section card">
-                  <p className="section-title">Social Security (SSC)</p>
+                <section className="section card" aria-labelledby="ssc-heading">
+                  <h2 className="section-title" id="ssc-heading">
+                    Social Security (SSC)
+                  </h2>
                   <p>Employee Contribution (0.9%, capped at N$99): {formatCurrency(sscEmployee)}</p>
                   <p>Employer Contribution (0.9%, capped at N$99): {formatCurrency(sscEmployer)}</p>
-                </div>
+                </section>
 
-                <div className="section actions">
+                <section className="section actions" aria-label="Download or share results">
                   <button type="button" className="action-button" onClick={handlePrint}>
                     Download Salary Breakdown (PDF)
                   </button>
                   <a className="action-button secondary" href={whatsappLink} target="_blank" rel="noreferrer">
                     Share to WhatsApp
                   </a>
-                </div>
+                </section>
 
                 <div className="dflex pb3">
                   <Image
@@ -334,13 +388,16 @@ export default function Home() {
               </>
             ) : (
               <>
-                <div className="section card">
-                  <p className="section-title">Corporate Tax & VAT Calculator</p>
+                <section className="section card" aria-labelledby="corporate-tax-heading">
+                  <h2 className="section-title" id="corporate-tax-heading">
+                    Corporate Tax & VAT Calculator
+                  </h2>
                   <p className="section-subtitle">Non-mining corporate tax rate: 30% (2025)</p>
                   <div className="grid">
-                    <label className="field">
+                    <label className="field" htmlFor="business-profit">
                       Annual Taxable Profit (N$)
                       <input
+                        id="business-profit"
                         type="number"
                         value={businessProfit}
                         onChange={(event) => setBusinessProfit(event.target.value)}
@@ -348,9 +405,10 @@ export default function Home() {
                         min="0"
                       />
                     </label>
-                    <label className="field">
+                    <label className="field" htmlFor="business-turnover">
                       Annual Turnover (N$)
                       <input
+                        id="business-turnover"
                         type="number"
                         value={businessTurnover}
                         onChange={(event) => setBusinessTurnover(event.target.value)}
@@ -368,40 +426,80 @@ export default function Home() {
                         : 'VAT registration not yet required based on turnover.'}
                     </p>
                   </div>
-                </div>
+                </section>
               </>
             )}
 
             <hr />
-            <div className="txtcenter txtfont2 p3">
+            <section className="txtcenter txtfont2 p3" aria-labelledby="tax-brackets-heading">
               <p className="pb3">
                 Introducing the Namibia Tax Calculator 2025/26. Quickly estimate PAYE, fringe benefits, and business tax
                 obligations using the latest Namibian tax thresholds from the PwC Tax Reference Card.
               </p>
-              <p className="txtbold pb3">2025/26 Individual Income Tax Brackets:</p>
-              <p>N$ 0 - 100 000 : 0% (Tax free threshold)</p>
-              <p>N$ 100 001 - 150 000 : 18% of amount over N$ 100 000</p>
-              <p>N$ 150 001 - 350 000 : N$ 9 000 + 25% of amount over N$ 150 000</p>
-              <p>N$ 350 001 - 550 000 : N$ 59 000 + 28% of amount over N$ 350 000</p>
-              <p>N$ 550 001 - 850 000 : N$ 115 000 + 30% of amount over N$ 550 000</p>
-              <p>N$ 850 001 - 1 550 000 : N$ 205 000 + 32% of amount over N$ 850 000</p>
-              <p>Above N$ 1 550 000 : N$ 429 000 + 37% of amount over N$ 1 550 000</p>
-              <p className="txtbold pb3 mt3">Business Updates:</p>
-              <p>Corporate tax for non-mining companies: 30% (from 1 Jan 2025)</p>
-              <p>VAT registration threshold: N$ 1 000 000 annual turnover</p>
-            </div>
+              <h2 className="txtbold pb3" id="tax-brackets-heading">
+                2025/26 Individual Income Tax Brackets
+              </h2>
+              <table className="tax-table">
+                <caption className="txtbold pb3">Namibia 2025/26 PAYE brackets</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Annual taxable income (N$)</th>
+                    <th scope="col">Tax rate</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>N$ 0 - 100 000</td>
+                    <td>0% (Tax free threshold)</td>
+                  </tr>
+                  <tr>
+                    <td>N$ 100 001 - 150 000</td>
+                    <td>18% of amount over N$ 100 000</td>
+                  </tr>
+                  <tr>
+                    <td>N$ 150 001 - 350 000</td>
+                    <td>N$ 9 000 + 25% of amount over N$ 150 000</td>
+                  </tr>
+                  <tr>
+                    <td>N$ 350 001 - 550 000</td>
+                    <td>N$ 59 000 + 28% of amount over N$ 350 000</td>
+                  </tr>
+                  <tr>
+                    <td>N$ 550 001 - 850 000</td>
+                    <td>N$ 115 000 + 30% of amount over N$ 550 000</td>
+                  </tr>
+                  <tr>
+                    <td>N$ 850 001 - 1 550 000</td>
+                    <td>N$ 205 000 + 32% of amount over N$ 850 000</td>
+                  </tr>
+                  <tr>
+                    <td>Above N$ 1 550 000</td>
+                    <td>N$ 429 000 + 37% of amount over N$ 1 550 000</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h3 className="txtbold pb3 mt3">Business Updates</h3>
+              <ul className="calendar">
+                <li>Corporate tax for non-mining companies: 30% (from 1 Jan 2025)</li>
+                <li>VAT registration threshold: N$ 1 000 000 annual turnover</li>
+              </ul>
+            </section>
 
-            <div className="section card">
-              <p className="section-title">NamRA Tax Calendar Notifications</p>
+            <section className="section card" aria-labelledby="tax-calendar-heading">
+              <h2 className="section-title" id="tax-calendar-heading">
+                NamRA Tax Calendar Notifications
+              </h2>
               <ul className="calendar">
                 <li>30 June: Individual income tax return deadline.</li>
                 <li>Monthly (20th): PAYE remittance to NamRA.</li>
                 <li>Bi-monthly (last day): VAT return submission for registered vendors.</li>
               </ul>
-            </div>
+            </section>
 
-            <div className="section card">
-              <p className="section-title">NamRA Integration Links</p>
+            <section className="section card" aria-labelledby="namra-links-heading">
+              <h2 className="section-title" id="namra-links-heading">
+                NamRA Integration Links
+              </h2>
               <p>
                 File directly on the{' '}
                 <a href="https://itas.mof.gov.na" target="_blank" rel="noreferrer">
@@ -417,10 +515,9 @@ export default function Home() {
                 </a>
                 .
               </p>
-            </div>
-          </div>
+            </section>
         </div>
-      </section>
+      </main>
       <div className="con2">
         <footer className="con footer">
           <div className="dflex">
@@ -445,7 +542,15 @@ export default function Home() {
           </div>
           <div className="txtcenter txtfont2">
             <p className="footer-disclaimer">
-              Based on the 2025 PwC Tax Rate Card. Consult a professional for official filing.
+              Based on the 2025 PwC Tax Rate Card. Consult a professional for official filing.{' '}
+              <a
+                href="https://www.namra.org.na/tax/"
+                target="_blank"
+                rel="nofollow external noreferrer"
+              >
+                NamRA official tax resources
+              </a>
+              .
             </p>
             <span className="txtfont1">
               &#169; {year} <a href="https://www.facebook.com/ciestomedia" target="_blank" rel="noreferrer">CiestoMedia</a>
