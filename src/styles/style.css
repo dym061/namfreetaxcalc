@@ -131,7 +131,7 @@
 }
 
 .badge {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 6px;
   background: rgba(255, 206, 0, 0.2);
@@ -141,26 +141,30 @@
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 1px;
+  justify-content: center;
+  margin: 0 auto 8px;
 }
 
 .toggle-group {
   display: flex;
   gap: 12px;
   background: rgba(255, 255, 255, 0.15);
-  padding: 6px;
+  padding: 4px 6px;
   border-radius: 999px;
+  align-items: center;
 }
 
 .toggle-button {
   border: none;
   background: transparent;
-  padding: 10px 20px;
+  padding: 8px 18px;
   font-family: var(--font-inter), sans-serif;
   cursor: pointer;
   color: #ffffff;
   border-radius: 999px;
   font-size: 14px;
   letter-spacing: 0.4px;
+  line-height: 1.1;
 }
 
 .toggle-active {
@@ -211,7 +215,7 @@
 .section-subtitle {
   font-size: 14px;
   margin-bottom: 16px;
-  color: #5c6b85;
+  color: #3d4a60;
 }
 
 .card {
@@ -276,7 +280,7 @@ select.input-field:focus {
   align-items: center;
   gap: 8px;
   font-size: 14px;
-  color: #5c6b85;
+  color: #3d4a60;
 }
 
 .inline-toggle {
@@ -284,7 +288,7 @@ select.input-field:focus {
   align-items: center;
   gap: 8px;
   font-size: 14px;
-  color: #2c3e57;
+  color: #3d4a60;
 }
 
 .summary-table {
@@ -389,26 +393,28 @@ select.input-field:focus {
 
 .result-subtext {
   font-size: 14px;
-  color: #2c3e57;
+  color: #3d4a60;
 }
 
 .empty-state {
   display: grid;
   gap: 12px;
   text-align: left;
-  padding: 18px;
-  border: 1px dashed rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
-  color: #7b879c;
+  padding: 20px;
+  border-radius: 10px;
+  background: #0d2b57;
+  color: #ffffff;
 }
 
 .empty-quote {
   font-size: 15px;
   font-style: italic;
+  color: #f2f6ff;
 }
 
 .empty-subtext {
   font-size: 13px;
+  color: #c9d6ef;
 }
 
 .calendar {
@@ -434,6 +440,7 @@ select.input-field:focus {
 .disclaimer {
   margin-top: 12px;
   font-size: 14px;
+  color: #3d4a60;
 }
 
 .example-grid {
@@ -489,6 +496,7 @@ select.input-field:focus {
 .last-updated {
   font-size: 14px;
   margin-bottom: 8px;
+  color: #3d4a60;
 }
 
 .tax-table {
@@ -519,7 +527,7 @@ select.input-field:focus {
 }
 
 .status-muted {
-  color: #555555;
+  color: #3d4a60;
 }
 
 @keyframes fadeIn {
