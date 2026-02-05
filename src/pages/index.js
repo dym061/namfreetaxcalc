@@ -640,18 +640,10 @@ export default function Home() {
                   <a className="action-button secondary" href={whatsappLink} target="_blank" rel="noreferrer">
                     Share to WhatsApp
                   </a>
+                  <button type="button" className="action-button tertiary" onClick={handleReset}>
+                    Reset
+                  </button>
                 </section>
-
-                <div className="dflex pb3">
-                  <Image
-                    width={35}
-                    height={35}
-                    src="/rotate-right-solid.png"
-                    alt="Reset Button"
-                    className="mxauto mt3 fillblue"
-                    onClick={handleReset}
-                  />
-                </div>
               </>
             ) : (
               <>
