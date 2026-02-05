@@ -155,21 +155,20 @@
 
 .toggle-group {
   display: flex;
-  gap: 12px;
-  background: rgba(255, 255, 255, 0.15);
-  padding: 4px 6px;
-  border-radius: 999px;
   align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
 }
 
 .toggle-button {
   border: none;
   background: transparent;
-  padding: 8px 18px;
   font-family: var(--font-inter), sans-serif;
   cursor: pointer;
-  color: #ffffff;
-  border-radius: 999px;
+  color: #aaaaaa;
+  border-radius: 10px;
+  margin:10px;
   font-size: 14px;
   letter-spacing: 0.4px;
   line-height: 1.1;
@@ -329,7 +328,7 @@ select.input-field:focus {
 
 .data-table th {
   font-weight: 600;
-  color: #1f5fa8;
+  color: #000000;
 }
 
 .data-table .amount {
@@ -340,7 +339,7 @@ select.input-field:focus {
 
 .emphasis-row td {
   font-weight: 600;
-  color: #0f1b2d;
+  color: #000000;
 }
 
 .comparison-grid {

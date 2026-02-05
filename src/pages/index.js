@@ -337,7 +337,14 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <div className="toggle-group">
+            
+          </div>
+        </header>
+
+        <main className="con dashboard">
+          <div className="dashboard-grid">
+            <div className="dashboard-panel">
+			<div className="toggle-group">
               <button
                 type="button"
                 className={`toggle-button ${viewMode === 'individual' ? 'toggle-active' : ''}`}
@@ -353,12 +360,7 @@ export default function Home() {
                 Company
               </button>
             </div>
-          </div>
-        </header>
-
-        <main className="con dashboard">
-          <div className="dashboard-grid">
-            <div className="dashboard-panel">
+			
               {viewMode === 'individual' ? (
                 <>
                   <section className="section card" aria-labelledby="monthly-salary-heading">
