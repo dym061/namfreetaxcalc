@@ -307,14 +307,14 @@ select.input-field:focus {
 .summary-table {
   margin-top: 16px;
   padding: 12px 16px;
-  background: #f4f7ff;
+  background: #f8f9ff;
   border-radius: 12px;
 }
 
 .data-table {
   width: 100%;
   border-collapse: collapse;
-  background: #ffffff;
+  background: #fdfdff;
   font-variant-numeric: tabular-nums;
 }
 
@@ -358,6 +358,9 @@ select.input-field:focus {
 }
 
 .action-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: #003580;
   color: #ffffff;
   padding: 12px 20px;
