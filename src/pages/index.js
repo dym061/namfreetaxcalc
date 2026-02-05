@@ -491,7 +491,7 @@ export default function Home() {
                   <h2 className="section-title" id="deductions-heading">
                     Deductions
                   </h2>
-                  <details className="accordion">
+                  <details className="accordion" open>
                     <summary className="accordion-summary">Retirement, Pension & Education Contributions</summary>
                     <div className="grid">
                       <label className="field" htmlFor="retirement-contribution">
