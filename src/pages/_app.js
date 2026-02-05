@@ -75,9 +75,9 @@ export default function App({ Component, pageProps }) {
         />
       </Head>
 
-      <div className={`${inter.variable} ${roboto.variable}`}>
+      <main className={`${roboto.className} ${inter.variable} ${roboto.variable}`}>
         <Component {...pageProps} />
-      </div>
+      </main>
     </>
   );
 }

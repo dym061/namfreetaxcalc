@@ -95,11 +95,16 @@
 }
 
 .txtfont2 {
-  font-family: var(--font-inter), sans-serif;
+  font-family: inherit, 'Inter', sans-serif;
 }
 
 .txtupper {
   text-transform: uppercase;
+}
+
+body {
+  font-family: inherit;
+  color: #555555;
 }
 
 .executive-header {
