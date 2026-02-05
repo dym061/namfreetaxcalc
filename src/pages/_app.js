@@ -2,19 +2,19 @@ import '@/styles/globals.css';
 import '@/styles/style.css';
 import Head from 'next/head';
 import Script from 'next/script';
-import { Roboto, Yantramanav } from 'next/font/google';
+import { Inter, Playfair_Display } from 'next/font/google';
 
-const roboto = Roboto({
+const inter = Inter({
   subsets: ['latin'],
-  weight: ['400', '500', '700'],
-  variable: '--font-roboto',
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-inter',
   display: 'swap',
 });
 
-const yantramanav = Yantramanav({
+const playfair = Playfair_Display({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '700'],
-  variable: '--font-yantramanav',
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-playfair',
   display: 'swap',
 });
 
@@ -75,7 +75,7 @@ export default function App({ Component, pageProps }) {
         />
       </Head>
 
-      <div className={`${roboto.variable} ${yantramanav.variable}`}>
+      <div className={`${inter.variable} ${playfair.variable}`}>
         <Component {...pageProps} />
       </div>
     </>
