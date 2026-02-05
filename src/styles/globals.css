@@ -30,7 +30,7 @@ body {
 	background-repeat: repeat-y;
 	width: auto;
 	margin: 0;
-  font-family: var(--font-inter), sans-serif;
+  font-family: var(--font-roboto), sans-serif;
   background: #f4f7fa;
   color: #111111;
 }
