@@ -13,10 +13,6 @@
   box-sizing: border-box;
   scrollbar-gutter: stable both-edges;}
 
- .con2 {
-  position: relative;
-}
-
 .content {
   width: 100%;
 }
@@ -24,6 +20,13 @@
 .dflex {display: flex;}
 
 .fillblue {filter: invert(15%) sepia(99%) saturate(5040%) hue-rotate(203deg) brightness(95%) contrast(102%);}
+
+.page-shell {
+  border: 1px solid #e2e2e2;
+  border-radius: 12px;
+  background: #ffffff;
+  overflow: hidden;
+}
 
 .footer {
   left: 0;
@@ -33,6 +36,7 @@
   color: #000000;
   padding: 10px;
   text-align: center;
+  border-top: 1px solid #e2e2e2;
 }
 
 .footer-disclaimer {
@@ -147,6 +151,23 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 12px;
+}
+
+.comparison-card {
+  display: grid;
+  gap: 8px;
+}
+
+.value-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-variant-numeric: tabular-nums;
+}
+
+.value-amount {
+  text-align: right;
+  min-width: 120px;
 }
 
 .actions {

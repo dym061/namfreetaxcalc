@@ -120,6 +120,7 @@ export default function Home() {
   const [includeOtherIncentives, setIncludeOtherIncentives] = useState(false);
   const [otherIncentives, setOtherIncentives] = useState('');
   const [retirementContribution, setRetirementContribution] = useState('');
+  const [pensionContribution, setPensionContribution] = useState('');
   const [educationContribution, setEducationContribution] = useState('');
   const [businessProfit, setBusinessProfit] = useState('');
   const [businessTurnover, setBusinessTurnover] = useState('');
@@ -156,6 +157,7 @@ export default function Home() {
     setIncludeOtherIncentives(false);
     setOtherIncentives('');
     setRetirementContribution('');
+    setPensionContribution('');
     setEducationContribution('');
     setBusinessProfit('');
     setBusinessTurnover('');
@@ -187,8 +189,9 @@ export default function Home() {
   const annualBonusValue = parseAmount(annualBonus);
   const otherIncentivesValue = includeOtherIncentives ? parseAmount(otherIncentives) : 0;
   const retirementContributionValue = parseAmount(retirementContribution);
+  const pensionContributionValue = parseAmount(pensionContribution);
   const educationContributionValue = parseAmount(educationContribution);
-  const totalContributionValue = retirementContributionValue + educationContributionValue;
+  const totalContributionValue = retirementContributionValue + pensionContributionValue + educationContributionValue;
   const deductibleContributions = Math.min(totalContributionValue, 150000);
   const carBenefitMonthly = carCostValue * 0.015;
   const annualHousingBenefitRaw = housingAllowanceValue * 12;
@@ -320,8 +323,9 @@ export default function Home() {
           }}
         />
       </Head>
-      <main className="con dflex shadow1">
-        <div className="mxauto mb3 p2 content">
+      <div className="page-shell shadow1 container">
+        <main className="con dflex">
+          <div className="mxauto mb3 p2 content">
             <div className="dflex p2">
               <Image width={100} height={65} src="/flag.png" alt="Namibian Flag" className="mxauto shadow1" />
             </div>
@@ -466,7 +470,7 @@ export default function Home() {
                     Deductions
                   </h2>
                   <details className="accordion">
-                    <summary className="accordion-summary">Retirement & Education Contributions</summary>
+                    <summary className="accordion-summary">Retirement, Pension & Education Contributions</summary>
                     <div className="grid">
                       <label className="field" htmlFor="retirement-contribution">
                         Retirement Fund Contributions (Annual N$)
@@ -475,6 +479,17 @@ export default function Home() {
                           type="number"
                           value={retirementContribution}
                           onChange={(event) => setRetirementContribution(event.target.value)}
+                          className="border border1 bordercol1 p2 txtcenter txtfont2"
+                          min="0"
+                        />
+                      </label>
+                      <label className="field" htmlFor="pension-contribution">
+                        Pension Contributions (Annual N$)
+                        <input
+                          id="pension-contribution"
+                          type="number"
+                          value={pensionContribution}
+                          onChange={(event) => setPensionContribution(event.target.value)}
                           className="border border1 bordercol1 p2 txtcenter txtfont2"
                           min="0"
                         />
@@ -519,20 +534,38 @@ export default function Home() {
                     Side-by-Side Comparison
                   </h2>
                   <div className="comparison">
-                    <div>
+                    <div className="comparison-card">
                       <p className="txtbold">Old Tax (2023)</p>
-                      <p>Annual: {oldBreakdown.annual}</p>
-                      <p>Monthly: {oldBreakdown.monthly}</p>
+                      <div className="value-row">
+                        <span>Annual</span>
+                        <span className="value-amount">{oldBreakdown.annual}</span>
+                      </div>
+                      <div className="value-row">
+                        <span>Monthly</span>
+                        <span className="value-amount">{oldBreakdown.monthly}</span>
+                      </div>
                     </div>
-                    <div>
+                    <div className="comparison-card">
                       <p className="txtbold">New Tax (2025/26)</p>
-                      <p>Annual: {newBreakdown.annual}</p>
-                      <p>Monthly: {newBreakdown.monthly}</p>
+                      <div className="value-row">
+                        <span>Annual</span>
+                        <span className="value-amount">{newBreakdown.annual}</span>
+                      </div>
+                      <div className="value-row">
+                        <span>Monthly</span>
+                        <span className="value-amount">{newBreakdown.monthly}</span>
+                      </div>
                     </div>
-                    <div>
+                    <div className="comparison-card">
                       <p className="txtbold">Estimated Savings</p>
-                      <p>Annual: {formatCurrency(taxSavings)}</p>
-                      <p>Monthly: {formatCurrency(taxSavings / 12)}</p>
+                      <div className="value-row">
+                        <span>Annual</span>
+                        <span className="value-amount">{formatCurrency(taxSavings)}</span>
+                      </div>
+                      <div className="value-row">
+                        <span>Monthly</span>
+                        <span className="value-amount">{formatCurrency(taxSavings / 12)}</span>
+                      </div>
                     </div>
                   </div>
                 </section>
@@ -831,9 +864,8 @@ export default function Home() {
                 ))}
               </div>
             </section>
-        </div>
-      </main>
-      <div className="con2">
+          </div>
+        </main>
         <footer className="con footer">
           <div className="dflex">
             <div className=" txtcenter mxauto">
