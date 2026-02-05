@@ -31,6 +31,10 @@ body {
 	width: auto;
 	margin: 0;
   font-family: var(--font-inter), sans-serif;
-  background: #f9f9f9;
+  background: #f4f7fa;
   color: #111111;
+}
+
+p {
+  color: #555555;
 }
