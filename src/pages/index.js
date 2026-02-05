@@ -327,11 +327,13 @@ export default function Home() {
         <header className="executive-header">
           <div className="con header-content">
             <div className="brand">
-              <Image width={90} height={58} src="/flag.png" alt="Namibian Flag" className="brand-mark" />
-              <div>
-                <span className="badge">Verified 2025/26 Compliance</span>
-                <h1 className="txtbold h4 txtcenter">Namibia Tax Calculator</h1>
-                <p className="h5 txtcenter">
+              <div className="brand-mark">
+                <Image width={72} height={48} src="/flag.png" alt="Namibian Flag" className="brand-flag" />
+              </div>
+              <div className="brand-copy">
+                <span className="badge">2025/2026 Compliance</span>
+                <h1 className="txtbold h4 txtfont1">Namibia Tax Executive</h1>
+                <p className="h5 header-description">
                   Use this free Namibia tax calculator to estimate PAYE, salary after tax, and take home pay. Enter your
                   gross salary to see a clear breakdown based on Namibia tax brackets.
                 </p>
@@ -604,11 +606,11 @@ export default function Home() {
                       <tbody>
                         <tr>
                           <td>Annual</td>
-                          <td className="amount">{formatCurrency(taxSavings)}</td>
+                          <td className="amount savings-amount">{formatCurrency(taxSavings)}</td>
                         </tr>
                         <tr>
                           <td>Monthly</td>
-                          <td className="amount">{formatCurrency(taxSavings / 12)}</td>
+                          <td className="amount savings-amount">{formatCurrency(taxSavings / 12)}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -799,7 +801,7 @@ export default function Home() {
                       <>
                         <div className="result-highlight">
                           <p className="result-label">Take Home Pay (Annual)</p>
-                          <p key={netAnnualIncome} className="result-value serif-display">
+                          <p key={netAnnualIncome} className="result-value result-positive serif-display">
                             {formatCurrency(netAnnualIncome)}
                           </p>
                           <p className="result-subtext">
@@ -825,7 +827,7 @@ export default function Home() {
                               <td className="amount">{formatCurrency(taxableAnnualIncome)}</td>
                             </tr>
                             <tr className="emphasis-row">
-                              <td>Annual Tax Payable (2025/26)</td>
+                              <td className="tax-label">Annual Tax Payable (2025/26)</td>
                               <td className="amount">{newBreakdown.annual}</td>
                             </tr>
                             <tr>
@@ -862,7 +864,7 @@ export default function Home() {
                       <>
                         <div className="result-highlight">
                           <p className="result-label">Company Profit After Tax</p>
-                          <p key={corporateTax} className="result-value serif-display">
+                          <p key={corporateTax} className="result-value result-positive serif-display">
                             {formatCurrency(corporateProfitValue - corporateTax)}
                           </p>
                           <p className="result-subtext">
