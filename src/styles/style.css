@@ -124,6 +124,19 @@
   gap: 8px;
 }
 
+.helper-text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.inline-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .summary {
   margin-top: 16px;
   display: grid;
