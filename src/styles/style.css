@@ -13,7 +13,7 @@
 }
 
 .fillblue {
-  filter: invert(13%) sepia(87%) saturate(3320%) hue-rotate(204deg) brightness(90%) contrast(103%);
+  filter: invert(38%) sepia(88%) saturate(1876%) hue-rotate(201deg) brightness(95%) contrast(95%);
 }
 
 .page-shell {
@@ -25,10 +25,10 @@
   bottom: 0;
   width: 100%;
   background-color: #ffffff;
-  color: #0f1b2d;
+  color: #111111;
   padding: 24px 10px;
   text-align: center;
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  border-top: 1px solid #eaeaea;
 }
 
 .footer-disclaimer {
@@ -103,18 +103,18 @@
 }
 
 .executive-header {
-  background: #003580;
-  color: #ffffff;
-  border-top: 2px solid #ffce00;
+  background: #ffffff;
+  color: #111111;
+  border-top: 2px solid #0070f3;
   padding: 24px 0 12px;
 }
 
 .executive-header .h4 {
-  color: #ffffff;
+  color: #111111;
 }
 
 .executive-header .h5 {
-  color: #e6eef8;
+  color: #555555;
 }
 
 .header-content {
@@ -136,14 +136,15 @@
   border-radius: 12px;
   background: #ffffff;
   padding: 6px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
 .badge {
   display: flex;
   align-items: center;
   gap: 6px;
-  background: rgba(255, 206, 0, 0.2);
-  color: #ffce00;
+  background: rgba(0, 112, 243, 0.1);
+  color: #0070f3;
   padding: 4px 10px;
   border-radius: 999px;
   font-size: 12px;
@@ -157,7 +158,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.15);
+  background: #f1f3f5;
   border-radius: 20px;
 }
 
@@ -166,7 +167,7 @@
   background: transparent;
   font-family: var(--font-inter), sans-serif;
   cursor: pointer;
-  color: #aaaaaa;
+  color: #666666;
   border-radius: 10px;
   margin:10px;
   font-size: 14px;
@@ -176,7 +177,7 @@
 
 .toggle-active {
   background: #ffffff;
-  color: #003580;
+  color: #0070f3;
   font-weight: 600;
 }
 
@@ -203,7 +204,7 @@
 
 .gold-divider {
   width: 2px;
-  background: #ffce00;
+  background: #eaeaea;
   border-radius: 999px;
   height: 100%;
   margin: 0 auto;
@@ -216,21 +217,21 @@
 .section-title {
   font-weight: 700;
   margin-bottom: 8px;
-  color: #0f1b2d;
+  color: #111111;
 }
 
 .section-subtitle {
   font-size: 14px;
   margin-bottom: 16px;
-  color: #3d4a60;
+  color: #555555;
 }
 
 .card {
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid #eaeaea;
   padding: 24px;
   border-radius: 12px;
   background: #ffffff;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
 }
 
 .slider-card {
@@ -254,7 +255,7 @@
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: #003580;
+  color: #0070f3;
 }
 
 .input-field,
@@ -263,9 +264,9 @@ select.input-field {
   width: 100%;
   padding: 12px 14px;
   border-radius: 10px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  background: #f4f7fa;
-  color: #0f1b2d;
+  border: 1px solid #d0d7de;
+  background: #ffffff;
+  color: #111111;
   font-family: var(--font-inter), sans-serif;
   font-size: 15px;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -273,15 +274,15 @@ select.input-field {
 
 .input-field::placeholder,
 select.input-field::placeholder {
-  color: #0f1b2d;
+  color: #6a737d;
 }
 
 .input-field:focus,
 .range-field:focus,
 select.input-field:focus {
   outline: none;
-  border-color: #003580;
-  box-shadow: 0 0 0 3px rgba(0, 53, 128, 0.15);
+  border-color: #0070f3;
+  box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.2);
 }
 
 .range-field {
@@ -293,7 +294,7 @@ select.input-field:focus {
   align-items: center;
   gap: 8px;
   font-size: 14px;
-  color: #3d4a60;
+  color: #555555;
 }
 
 .inline-toggle {
@@ -301,20 +302,20 @@ select.input-field:focus {
   align-items: center;
   gap: 8px;
   font-size: 14px;
-  color: #3d4a60;
+  color: #555555;
 }
 
 .summary-table {
   margin-top: 16px;
   padding: 12px 16px;
-  background: #f8f9ff;
+  background: #f5f5f5;
   border-radius: 12px;
 }
 
 .data-table {
   width: 100%;
   border-collapse: collapse;
-  background: #fdfdff;
+  background: #ffffff;
   font-variant-numeric: tabular-nums;
 }
 
@@ -322,14 +323,14 @@ select.input-field:focus {
 .data-table th {
   padding: 10px 8px;
   text-align: left;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid #ededed;
   font-size: 14px;
-  color: #4a5568;
+  color: #444444;
 }
 
 .data-table th {
   font-weight: 600;
-  color: #000000;
+  color: #111111;
 }
 
 .data-table .amount {
@@ -340,7 +341,7 @@ select.input-field:focus {
 
 .emphasis-row td {
   font-weight: 600;
-  color: #000000;
+  color: #111111;
 }
 
 .comparison-grid {
@@ -361,7 +362,7 @@ select.input-field:focus {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #003580;
+  background: #0070f3;
   color: #ffffff;
   padding: 12px 20px;
   border-radius: 999px;
@@ -374,14 +375,14 @@ select.input-field:focus {
 }
 
 .action-button:hover {
-  box-shadow: inset 0 -3px 0 #ffce00;
+  box-shadow: inset 0 -3px 0 #0a5fcc;
   transform: translateY(-1px);
 }
 
 .action-button.secondary {
-  background: #d9ecff;
-  color: #0f1b2d;
-  border: 1px solid #b9d6ff;
+  background: #f1f3f5;
+  color: #111111;
+  border: 1px solid #d0d7de;
 }
 
 .action-button.secondary:hover {
@@ -390,8 +391,8 @@ select.input-field:focus {
 
 .action-button.tertiary {
   background: #ffffff;
-  color: #0f1b2d;
-  border: 1px solid #c8d6ea;
+  color: #111111;
+  border: 1px solid #d0d7de;
 }
 
 .executive-summary {
@@ -401,7 +402,7 @@ select.input-field:focus {
 
 .result-highlight {
   border-radius: 12px;
-  background: rgba(0, 149, 67, 0.08);
+  background: rgba(0, 112, 243, 0.1);
   padding: 20px;
   display: grid;
   gap: 6px;
@@ -411,12 +412,12 @@ select.input-field:focus {
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: #003580;
+  color: #0070f3;
 }
 
 .result-value {
   font-size: 32px;
-  color: #009543;
+  color: #0070f3;
   font-weight: 700;
   animation: fadeIn 0.4s ease;
 }
@@ -427,7 +428,7 @@ select.input-field:focus {
 
 .result-subtext {
   font-size: 14px;
-  color: #3d4a60;
+  color: #555555;
 }
 
 .empty-state {
@@ -436,19 +437,19 @@ select.input-field:focus {
   text-align: left;
   padding: 20px;
   border-radius: 10px;
-  background: #0d2b57;
+  background: #111111;
   color: #ffffff;
 }
 
 .empty-quote {
   font-size: 15px;
   font-style: italic;
-  color: #f2f6ff;
+  color: #f5f5f5;
 }
 
 .empty-subtext {
   font-size: 13px;
-  color: #c9d6ef;
+  color: #d0d0d0;
 }
 
 .calendar {
@@ -474,7 +475,7 @@ select.input-field:focus {
 .disclaimer {
   margin-top: 12px;
   font-size: 14px;
-  color: #3d4a60;
+  color: #555555;
 }
 
 .example-grid {
@@ -488,7 +489,7 @@ select.input-field:focus {
 }
 
 .accordion {
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid #eaeaea;
   border-radius: 10px;
   padding: 12px;
   background: #ffffff;
@@ -530,7 +531,7 @@ select.input-field:focus {
 .last-updated {
   font-size: 14px;
   margin-bottom: 8px;
-  color: #3d4a60;
+  color: #555555;
 }
 
 .tax-table {
@@ -546,22 +547,22 @@ select.input-field:focus {
 
 .tax-table th,
 .tax-table td {
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid #eaeaea;
   padding: 10px;
   text-align: left;
 }
 
 .tax-table thead th {
-  background: #f4f7fa;
+  background: #f5f5f5;
 }
 
 .status-good {
-  color: #009543;
+  color: #0070f3;
   font-weight: 600;
 }
 
 .status-muted {
-  color: #3d4a60;
+  color: #555555;
 }
 
 @keyframes fadeIn {
