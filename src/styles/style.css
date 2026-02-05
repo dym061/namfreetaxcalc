@@ -288,7 +288,7 @@ select.input-field {
   padding: 12px 14px;
   border-radius: 8px;
   border: none;
-  border-bottom: 1px solid #d7dbe0;
+  border: 1px solid #d7dbe0;
   background: #ffffff;
   color: #111111;
   font-family: var(--font-inter), sans-serif;
