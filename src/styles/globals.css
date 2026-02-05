@@ -11,11 +11,14 @@ body {
 }
 
 a {
-white-space: nowrap;
-overflow: hidden;
-text-decoration:none;
-text-overflow: ellipsis;
-color:#000000;}
+  color: #1a5fb4;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+a:hover {
+  color: #0b4ea2;
+}
 
 a, audio, b, body, center, dd, div, dl, dt, embed, footer, form, h1, h2, h3, h4, h5, h6, header, html, i, iframe, img, input, label, li, menu, nav, object, ol, output, p, ruby, section, span, table, tbody, td, textarea, tfoot, th, thead, tr, tt, u, ul, var, video {
   margin: 0;
