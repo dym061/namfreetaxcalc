@@ -109,6 +109,14 @@
   padding: 24px 0 12px;
 }
 
+.executive-header .h4 {
+  color: #ffffff;
+}
+
+.executive-header .h5 {
+  color: #e6eef8;
+}
+
 .header-content {
   display: flex;
   flex-wrap: wrap;
@@ -258,9 +266,15 @@ select.input-field {
   border-radius: 10px;
   border: 1px solid rgba(0, 0, 0, 0.12);
   background: #f4f7fa;
+  color: #0f1b2d;
   font-family: var(--font-inter), sans-serif;
   font-size: 15px;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-field::placeholder,
+select.input-field::placeholder {
+  color: #0f1b2d;
 }
 
 .input-field:focus,
@@ -357,7 +371,8 @@ select.input-field:focus {
 }
 
 .action-button.secondary {
-  background: #009543;
+  background: #d9ecff;
+  color: #0f1b2d;
 }
 
 .executive-summary {
