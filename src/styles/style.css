@@ -281,6 +281,8 @@ body {
 
 .label-text {
   font-size: 12px;
+  font-weight: bold;
+  padding-top: 10px;
   text-transform: uppercase;
   letter-spacing: 1px;
   color: #003580;
@@ -344,7 +346,7 @@ select.input-field:focus {
 .data-table {
   width: 100%;
   border-collapse: collapse;
-  background: #ffffff;
+  background: #f4f7fa;
   font-variant-numeric: tabular-nums;
 }
 
