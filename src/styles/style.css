@@ -91,7 +91,7 @@
 }
 
 .txtfont1 {
-  font-family: var(--font-playfair), serif;
+  font-family: var(--font-roboto), sans-serif;
 }
 
 .txtfont2 {
@@ -144,18 +144,19 @@
 }
 
 .badge {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(255, 206, 0, 0.15);
   color: #ffce00;
-  padding: 4px 10px;
-  border-radius: 999px;
+  padding: 0;
+  border-radius: 0;
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 1px;
   justify-content: flex-start;
   margin: 0 0 8px;
+  text-align: left;
+  align-self: flex-start;
 }
 
 .brand-flag {
@@ -239,7 +240,7 @@
   font-weight: 700;
   margin-bottom: 8px;
   color: #111111;
-  font-family: var(--font-playfair), serif;
+  font-family: var(--font-roboto), sans-serif;
 }
 
 .section-subtitle {
@@ -450,7 +451,7 @@ select.input-field:focus {
 }
 
 .serif-display {
-  font-family: var(--font-playfair), serif;
+  font-family: var(--font-roboto), sans-serif;
 }
 
 .result-subtext {
