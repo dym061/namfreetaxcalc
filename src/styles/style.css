@@ -307,14 +307,14 @@ select.input-field:focus {
 .summary-table {
   margin-top: 16px;
   padding: 12px 16px;
-  background: #f9fbff;
+  background: #f4f7ff;
   border-radius: 12px;
 }
 
 .data-table {
   width: 100%;
   border-collapse: collapse;
-  background: #fbfdff;
+  background: #ffffff;
   font-variant-numeric: tabular-nums;
 }
 
