@@ -1107,9 +1107,7 @@ export default function Home() {
               .
             </p>
             <p className="last-updated">Last updated: February 2, 2026</p>
-            <span className="txtfont1">
-              &#169; {year} <a href="https://www.facebook.com/ciestomedia" target="_blank" rel="noreferrer">CiestoMedia</a>
-            </span>
+            <span className="txtfont1">&#169; {year} Namibia Tax Calculator</span>
           </div>
         </footer>
       </div>
