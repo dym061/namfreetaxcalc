@@ -1529,11 +1529,11 @@ export default function Home() {
             <h3 className="txtbold pb3 mt3">NamRA Integration Links</h3>
             <p>
               File directly on the{' '}
-              <a href="https://itas.mof.gov.na" target="_blank" rel="noreferrer">
+              <a href="https://itas.namra.org.na/e-Portal/login" target="_blank" rel="noreferrer">
                 NamRA ITAS portal
               </a>{' '}
               or read the{' '}
-              <a href="https://itas.mof.gov.na/Account/Register" target="_blank" rel="noreferrer">
+              <a href="https://itas.namra.org.na/e-Portal/register" target="_blank" rel="noreferrer">
                 ITAS registration guide
               </a>
               .
