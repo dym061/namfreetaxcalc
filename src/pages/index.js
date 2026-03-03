@@ -582,7 +582,10 @@ export default function Home() {
 
   const handlePrint = () => {
     if (typeof window !== 'undefined') {
-      window.print();
+      window.scrollTo({ top: 0, behavior: 'auto' });
+      window.requestAnimationFrame(() => {
+        window.print();
+      });
     }
   };
 
