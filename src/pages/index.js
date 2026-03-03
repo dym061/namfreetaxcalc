@@ -1380,7 +1380,7 @@ export default function Home() {
 
                   <p className="other-expenses-total">Total Other Expenses: {formatCurrency(totalOtherExpenses)}</p>
                   {viewMode === 'individual' && (
-                    <p className="other-expenses-total">Nett Remainder: {formatCurrency(netMonthlyRemainder)}</p>
+                    <p className="other-expenses-total">Net Remainder: {formatCurrency(netMonthlyRemainder)}</p>
                   )}
 
                   <datalist id={`expense-types-${viewMode}`}>
