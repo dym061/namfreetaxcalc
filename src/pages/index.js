@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import {
@@ -273,6 +273,8 @@ export default function Home() {
   const [expenseType, setExpenseType] = useState('');
   const [expenseAmount, setExpenseAmount] = useState('');
   const [editingExpenseId, setEditingExpenseId] = useState(null);
+  const [expenseImportMessage, setExpenseImportMessage] = useState('');
+  const expenseCsvInputRef = useRef(null);
 
   useEffect(() => {
     const handleWheel = (event) => {
@@ -412,6 +414,34 @@ export default function Home() {
     setEditingExpenseId(null);
   };
 
+  const parseCsvRow = (row) => {
+    const values = [];
+    let currentValue = '';
+    let insideQuotes = false;
+
+    for (let index = 0; index < row.length; index += 1) {
+      const character = row[index];
+      const nextCharacter = row[index + 1];
+
+      if (character === '"') {
+        if (insideQuotes && nextCharacter === '"') {
+          currentValue += '"';
+          index += 1;
+        } else {
+          insideQuotes = !insideQuotes;
+        }
+      } else if (character === ',' && !insideQuotes) {
+        values.push(currentValue.trim());
+        currentValue = '';
+      } else {
+        currentValue += character;
+      }
+    }
+
+    values.push(currentValue.trim());
+    return values;
+  };
+
   const addOrUpdateExpenseItem = () => {
     if (!expenseName.trim() && !expenseType.trim() && !expenseAmount.trim()) {
       return;
@@ -473,6 +503,79 @@ export default function Home() {
     downloadLink.download = `${viewMode}-expenses.csv`;
     downloadLink.click();
     URL.revokeObjectURL(csvUrl);
+  };
+
+  const handleLoadCsvClick = () => {
+    if (expenseCsvInputRef.current) {
+      expenseCsvInputRef.current.value = '';
+      expenseCsvInputRef.current.click();
+    }
+  };
+
+  const handleLoadExpensesCsv = (event) => {
+    const selectedFile = event.target.files?.[0];
+
+    if (!selectedFile) {
+      return;
+    }
+
+    if (!selectedFile.name.toLowerCase().endsWith('.csv')) {
+      setExpenseImportMessage('Please choose a valid CSV file.');
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = ({ target }) => {
+      const csvText = String(target?.result || '');
+      const rows = csvText
+        .split(/\r?\n/)
+        .map((row) => row.trim())
+        .filter(Boolean);
+
+      if (rows.length < 2) {
+        setExpenseImportMessage('CSV file is empty or does not include any expense rows.');
+        return;
+      }
+
+      const expectedHeaders = ['expense name', 'expense type', 'expense amount (monthly n$)'];
+      const headers = parseCsvRow(rows[0]).map((header) => header.toLowerCase());
+
+      if (!expectedHeaders.every((header, index) => headers[index] === header)) {
+        setExpenseImportMessage('CSV format is not supported. Please use an exported expenses CSV file.');
+        return;
+      }
+
+      const importedExpenses = rows
+        .slice(1)
+        .map((row) => parseCsvRow(row))
+        .filter((columns) => columns.length >= 3)
+        .map((columns) => {
+          const [name, type, amount] = columns;
+          return {
+            id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+            name: String(name || '').trim(),
+            type: String(type || '').trim(),
+            amount: String(parseAmount(amount).toFixed(2)),
+          };
+        })
+        .filter((expense) => expense.name || expense.type || parseAmount(expense.amount) > 0);
+
+      if (importedExpenses.length === 0) {
+        setExpenseImportMessage('No valid expenses were found in the selected CSV file.');
+        return;
+      }
+
+      setOtherExpenses(importedExpenses);
+      setExpenseImportMessage(`${importedExpenses.length} expense item(s) loaded successfully.`);
+      clearExpenseForm();
+    };
+
+    reader.onerror = () => {
+      setExpenseImportMessage('Unable to read this file. Please try another CSV file.');
+    };
+
+    reader.readAsText(selectedFile);
   };
 
   const handlePrint = () => {
@@ -1149,10 +1252,31 @@ export default function Home() {
 
               <div className="executive-summary">
                 <details className="" open>
-                  <summary className="accordion-summary">Other Expenses</summary>
+                  <summary className="accordion-summary other-expenses-summary">
+                    <span>Other Expenses</span>
+                    <button
+                      type="button"
+                      className="action-button secondary action-button-small"
+                      onClick={(event) => {
+                        event.preventDefault();
+                        handleLoadCsvClick();
+                      }}
+                    >
+                      load
+                    </button>
+                    <input
+                      ref={expenseCsvInputRef}
+                      type="file"
+                      accept=".csv,text/csv"
+                      className="visually-hidden"
+                      onChange={handleLoadExpensesCsv}
+                    />
+                  </summary>
                   <div className="other-expenses-description">
-                    Add monthly expenses, then review them in a table with quick edit/delete actions.
+                    Add monthly expenses, then review them in a table with quick edit/delete actions. CSV imports are
+                    processed in your browser so data stays on your device.
                   </div>
+                  {expenseImportMessage && <p className="expense-import-message">{expenseImportMessage}</p>}
                   <div className="grid other-expense-form">
                     <label className="field" htmlFor="expense-name-input">
                       <span className="label-text">Expense Name</span>
