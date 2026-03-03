@@ -1581,7 +1581,7 @@ export default function Home() {
             <p className="footer-disclaimer">
               Based on the 2025 PwC Tax Rate Card. Consult a professional for official filing.{' '}
               <a
-                href="https://itas.namra.org.na/"
+                href="https://www.namra.org.na/individual-tax/page/general-tax-information"
                 target="_blank"
                 rel="nofollow external noreferrer"
               >
