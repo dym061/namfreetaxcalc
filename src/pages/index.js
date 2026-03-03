@@ -14,13 +14,15 @@ import {
   LinkedinIcon,
 } from 'next-share';
 
+const currencyFormatter = new Intl.NumberFormat('en-NA', {
+  style: 'currency',
+  currency: 'NAD',
+  minimumFractionDigits: 2,
+});
+
 const formatCurrency = (value) => {
   const numberValue = Number.isFinite(value) ? value : 0;
-  return new Intl.NumberFormat('en-NA', {
-    style: 'currency',
-    currency: 'NAD',
-    minimumFractionDigits: 2,
-  }).format(numberValue);
+  return currencyFormatter.format(numberValue).replace(/^\$/, 'N$').replace(/^-\$/, '-N$');
 };
 
 const parseAmount = (value) => {
