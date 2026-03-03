@@ -659,13 +659,25 @@ export default function Home() {
               <div className="brand-mark">
                 <Image width={72} height={48} src="/flag.png" alt="Namibian Flag" className="brand-flag" />
               </div>
-              <div className="brand-copy">
+              <div className="brand-copy ">
                 <span className="badge">2025/2026 Compliance</span>
                 <h1 className="txtbold h4 txtfont1">Namibia Tax Calculator</h1>
-                <p className="h5 header-description">
-                  Use this free Namibia tax calculator to estimate PAYE, salary after tax, and take home pay. Enter your
-                  gross salary to see a clear breakdown based on Namibia tax brackets.
-                </p>
+				
+				
+				
+				<div className="dflex">
+                  <p className="h5 header-description">
+                    Use this free Namibia tax calculator to estimate PAYE, salary after tax, and take home pay. Enter your
+                    gross salary to see a clear breakdown based on Namibia tax brackets.
+                  </p>
+				
+                  <p className="h5 header-description">
+                    This free Namibian Income Tax Calculator helps you estimate your monthly and annual tax. It uses the 
+				    latest Namibian income tax rates to ensure accurate calculation of Namibian tax obligations.
+                  </p>	
+				</div>
+				
+				
               </div>
             </div>
             
