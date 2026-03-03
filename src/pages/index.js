@@ -269,6 +269,10 @@ export default function Home() {
   const [interestWithholding, setInterestWithholding] = useState('');
   const [viewMode, setViewMode] = useState('individual');
   const [otherExpenses, setOtherExpenses] = useState([]);
+  const [expenseName, setExpenseName] = useState('');
+  const [expenseType, setExpenseType] = useState('');
+  const [expenseAmount, setExpenseAmount] = useState('');
+  const [editingExpenseId, setEditingExpenseId] = useState(null);
 
   useEffect(() => {
     const handleWheel = (event) => {
@@ -306,6 +310,10 @@ export default function Home() {
     setApplyDividendTax(false);
     setInterestWithholding('');
     setOtherExpenses([]);
+    setExpenseName('');
+    setExpenseType('');
+    setExpenseAmount('');
+    setEditingExpenseId(null);
   };
 
   const handleSliderWheel = (event) => {
@@ -392,38 +400,54 @@ export default function Home() {
   const interestWithholdingTax = interestWithholdingValue * 0.1;
   const availableExpenseTypes = viewMode === 'individual' ? INDIVIDUAL_EXPENSE_TYPES : COMPANY_EXPENSE_TYPES;
   const totalOtherExpenses = otherExpenses.reduce((total, expense) => total + parseAmount(expense.amount), 0);
-  const adjustedNetAnnualIncome = netAnnualIncome - totalOtherExpenses;
-  const adjustedCompanyProfit = corporateProfitValue - corporateTax - totalOtherExpenses;
+  const totalOtherExpensesAnnual = totalOtherExpenses * 12;
+  const netMonthlyRemainder = netMonthlyIncome - totalOtherExpenses;
+  const adjustedNetAnnualIncome = netAnnualIncome - totalOtherExpensesAnnual;
+  const adjustedCompanyProfit = corporateProfitValue - corporateTax - totalOtherExpensesAnnual;
 
-  const addExpenseItem = () => {
+  const clearExpenseForm = () => {
+    setExpenseName('');
+    setExpenseType('');
+    setExpenseAmount('');
+    setEditingExpenseId(null);
+  };
+
+  const addOrUpdateExpenseItem = () => {
+    if (!expenseName.trim() && !expenseType.trim() && !expenseAmount.trim()) {
+      return;
+    }
+
+    const expensePayload = {
+      name: expenseName.trim(),
+      type: expenseType.trim(),
+      amount: expenseAmount,
+    };
+
+    if (editingExpenseId) {
+      setOtherExpenses((currentExpenses) =>
+        currentExpenses.map((expense) =>
+          expense.id === editingExpenseId ? { ...expense, ...expensePayload } : expense,
+        ),
+      );
+      clearExpenseForm();
+      return;
+    }
+
     setOtherExpenses((currentExpenses) => [
       ...currentExpenses,
       {
         id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-        name: '',
-        type: '',
-        amount: '',
+        ...expensePayload,
       },
     ]);
+    clearExpenseForm();
   };
 
-  const updateExpenseItem = (id, field, value) => {
-    setOtherExpenses((currentExpenses) =>
-      currentExpenses.map((expense) => (expense.id === id ? { ...expense, [field]: value } : expense)),
-    );
-  };
-
-  const moveExpenseItem = (index, direction) => {
-    setOtherExpenses((currentExpenses) => {
-      const newIndex = index + direction;
-      if (newIndex < 0 || newIndex >= currentExpenses.length) {
-        return currentExpenses;
-      }
-      const reorderedExpenses = [...currentExpenses];
-      const [movedExpense] = reorderedExpenses.splice(index, 1);
-      reorderedExpenses.splice(newIndex, 0, movedExpense);
-      return reorderedExpenses;
-    });
+  const beginEditExpenseItem = (expense) => {
+    setExpenseName(expense.name);
+    setExpenseType(expense.type);
+    setExpenseAmount(expense.amount);
+    setEditingExpenseId(expense.id);
   };
 
   const removeExpenseItem = (id) => {
@@ -436,7 +460,7 @@ export default function Home() {
     }
 
     const csvRows = [
-      ['Expense Name', 'Expense Type', 'Expense Amount (N$)'],
+      ['Expense Name', 'Expense Type', 'Expense Amount (Monthly N$)'],
       ...otherExpenses.map((expense) => [expense.name, expense.type, parseAmount(expense.amount).toFixed(2)]),
     ];
     const csvContent = csvRows
@@ -1014,7 +1038,7 @@ export default function Home() {
                           </p>
                           {otherExpenses.length > 0 && (
                             <p className="result-subtext">
-                              After other expenses: {formatCurrency(adjustedNetAnnualIncome)}
+                              After other expenses (annual): {formatCurrency(adjustedNetAnnualIncome)}
                             </p>
                           )}
                         </div>
@@ -1082,7 +1106,7 @@ export default function Home() {
                           </p>
                           {otherExpenses.length > 0 && (
                             <p className="result-subtext">
-                              After other expenses: {formatCurrency(adjustedCompanyProfit)}
+                              After other expenses (annual): {formatCurrency(adjustedCompanyProfit)}
                             </p>
                           )}
                         </div>
@@ -1127,66 +1151,112 @@ export default function Home() {
                 <details className="accordion" open>
                   <summary className="accordion-summary">Other Expenses</summary>
                   <div className="other-expenses-description">
-                    Add any additional expenses to estimate your pure net income after tax and mandatory deductions.
+                    Add monthly expenses, then review them in a table with quick edit/delete actions.
                   </div>
-                  <div className="other-expenses-list">
-                    {otherExpenses.map((expense, index) => (
-                      <div className="other-expense-item" key={expense.id}>
-                        <label className="field" htmlFor={`expense-name-${expense.id}`}>
-                          <span className="label-text">Expense Name</span>
-                          <input
-                            id={`expense-name-${expense.id}`}
-                            type="text"
-                            className="input-field"
-                            value={expense.name}
-                            onChange={(event) => updateExpenseItem(expense.id, 'name', event.target.value)}
-                            placeholder="e.g. Household utilities"
-                          />
-                        </label>
-                        <label className="field" htmlFor={`expense-type-${expense.id}`}>
-                          <span className="label-text">Expense Type</span>
-                          <input
-                            id={`expense-type-${expense.id}`}
-                            type="text"
-                            className="input-field"
-                            value={expense.type}
-                            onChange={(event) => updateExpenseItem(expense.id, 'type', event.target.value)}
-                            placeholder="Type or select"
-                            list={`expense-types-${viewMode}`}
-                          />
-                        </label>
-                        <label className="field" htmlFor={`expense-amount-${expense.id}`}>
-                          <span className="label-text">Expense Amount (Annual N$)</span>
-                          <input
-                            id={`expense-amount-${expense.id}`}
-                            type="number"
-                            className="input-field"
-                            value={expense.amount}
-                            onChange={(event) => updateExpenseItem(expense.id, 'amount', event.target.value)}
-                            min="0"
-                            step="0.01"
-                          />
-                        </label>
-                        <div className="expense-item-actions">
-                          <button type="button" className="action-button tertiary" onClick={() => moveExpenseItem(index, -1)}>
-                            Move Up
-                          </button>
-                          <button type="button" className="action-button tertiary" onClick={() => moveExpenseItem(index, 1)}>
-                            Move Down
-                          </button>
-                          <button type="button" className="action-button tertiary" onClick={() => removeExpenseItem(expense.id)}>
-                            Delete
-                          </button>
-                        </div>
-                      </div>
-                    ))}
+                  <div className="grid other-expense-form">
+                    <label className="field" htmlFor="expense-name-input">
+                      <span className="label-text">Expense Name</span>
+                      <input
+                        id="expense-name-input"
+                        type="text"
+                        className="input-field"
+                        value={expenseName}
+                        onChange={(event) => setExpenseName(event.target.value)}
+                        placeholder="e.g. Household utilities"
+                      />
+                    </label>
+                    <label className="field" htmlFor="expense-type-input">
+                      <span className="label-text">Expense Type</span>
+                      <input
+                        id="expense-type-input"
+                        type="text"
+                        className="input-field"
+                        value={expenseType}
+                        onChange={(event) => setExpenseType(event.target.value)}
+                        placeholder="Type or select"
+                        list={`expense-types-${viewMode}`}
+                      />
+                    </label>
+                    <label className="field" htmlFor="expense-amount-input">
+                      <span className="label-text">Expense Amount (Monthly N$)</span>
+                      <input
+                        id="expense-amount-input"
+                        type="number"
+                        className="input-field"
+                        value={expenseAmount}
+                        onChange={(event) => setExpenseAmount(event.target.value)}
+                        min="0"
+                        step="0.01"
+                      />
+                    </label>
                   </div>
-                  <button type="button" className="action-button" onClick={addExpenseItem}>
-                    Add Expense
-                  </button>
+                  <div className="expense-form-actions">
+                    <button type="button" className="action-button" onClick={addOrUpdateExpenseItem}>
+                      {editingExpenseId ? 'Update Expense' : 'Add Expense'}
+                    </button>
+                    {editingExpenseId && (
+                      <button type="button" className="action-button secondary" onClick={clearExpenseForm}>
+                        Cancel
+                      </button>
+                    )}
+                  </div>
+
                   {otherExpenses.length > 0 && (
-                    <p className="other-expenses-total">Total Other Expenses: {formatCurrency(totalOtherExpenses)}</p>
+                    <>
+                      <div className="other-expenses-toolbar">
+                        <button type="button" className="action-button secondary" onClick={handleDownloadExpensesCsv}>
+                          Export CSV
+                        </button>
+                      </div>
+                      <table className="data-table other-expenses-table">
+                        <thead>
+                          <tr>
+                            <th>Header</th>
+                            <th>Name of expense</th>
+                            <th>Type of Expense</th>
+                            <th className="amount">Amount of expense</th>
+                            <th className="amount">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {otherExpenses.map((expense, index) => (
+                            <tr key={expense.id}>
+                              <td>Expense {index + 1}</td>
+                              <td>{expense.name || '-'}</td>
+                              <td>{expense.type || '-'}</td>
+                              <td className="amount">{formatCurrency(parseAmount(expense.amount))}</td>
+                              <td className="amount expense-actions-cell">
+                                <button
+                                  type="button"
+                                  className="expense-icon-button"
+                                  onClick={() => beginEditExpenseItem(expense)}
+                                  aria-label={`Edit ${expense.name || `expense ${index + 1}`}`}
+                                  title="Edit"
+                                >
+                                  ✏️
+                                </button>
+                                <button
+                                  type="button"
+                                  className="expense-icon-button"
+                                  onClick={() => removeExpenseItem(expense.id)}
+                                  aria-label={`Delete ${expense.name || `expense ${index + 1}`}`}
+                                  title="Delete"
+                                >
+                                  🗑️
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </>
                   )}
+
+                  <p className="other-expenses-total">Total Other Expenses: {formatCurrency(totalOtherExpenses)}</p>
+                  {viewMode === 'individual' && (
+                    <p className="other-expenses-total">Nett Remainder: {formatCurrency(netMonthlyRemainder)}</p>
+                  )}
+
                   <datalist id={`expense-types-${viewMode}`}>
                     {availableExpenseTypes.map((expenseType) => (
                       <option value={expenseType} key={expenseType} />
