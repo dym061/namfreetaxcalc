@@ -420,6 +420,13 @@ select.input-field:focus {
   box-shadow: none;
 }
 
+.action-button-small {
+  padding: 6px 12px;
+  font-size: 12px;
+  line-height: 1;
+  text-transform: lowercase;
+}
+
 .action-button.tertiary {
   background: #ffffff;
   color: #111111;
@@ -594,6 +601,31 @@ select.input-field:focus {
   cursor: pointer;
   font-weight: 600;
   list-style: none;
+}
+
+.other-expenses-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.expense-import-message {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: #0f5132;
 }
 
 .accordion-summary::-webkit-details-marker {
