@@ -84,6 +84,144 @@ const META_DESCRIPTION =
   'Free Namibia tax calculator to estimate PAYE, salary after tax, and take home pay using Namibia tax brackets. Includes simple explanations and salary examples.';
 const CANONICAL_URL = 'https://namfreetaxcalc.vercel.app';
 
+const INDIVIDUAL_EXPENSE_TYPES = [
+  'Bond / mortgage repayment',
+  'Rent',
+  'Rent-to-own payments',
+  'Body corporate / levy fees',
+  'Home insurance',
+  'Contents insurance',
+  'Home maintenance and repairs',
+  'Security services / alarm monitoring',
+  'Garden services',
+  'Electricity (prepaid / postpaid)',
+  'Water',
+  'Refuse removal',
+  'Sewerage',
+  'Gas (LPG)',
+  'Generator fuel',
+  'Solar system loan / rental',
+  'Groceries',
+  'Cleaning supplies',
+  'Toiletries',
+  'Baby products',
+  'Pet food and supplies',
+  'Vehicle installment',
+  'Vehicle insurance',
+  'Vehicle tracker subscription',
+  'Fuel',
+  'Vehicle maintenance & servicing',
+  'Tyres',
+  'License & registration',
+  'Public transport',
+  'Taxi / ride-hailing',
+  'Parking fees',
+  'Life insurance',
+  'Funeral policy',
+  'Medical aid contribution',
+  'Gap cover',
+  'Short-term insurance',
+  'Disability cover',
+  'Income protection',
+  'Mobile contracts',
+  'Prepaid airtime',
+  'Internet / fibre',
+  'LTE / router contracts',
+  'TV subscription',
+  'Streaming services',
+  'School fees',
+  'University tuition',
+  'School transport',
+  'School uniforms',
+  'Books & stationery',
+  'Extramural activities',
+  'Aftercare',
+  'Personal loans',
+  'Credit cards',
+  'Store accounts',
+  'Microloans',
+  'Hire purchase agreements',
+  'Payday loans',
+  'Overdraft repayments',
+  'Cellphone device contracts',
+  'Furniture accounts',
+  'Maintenance payments',
+  'Child support',
+  'Domestic worker wages',
+  'Caregiver payments',
+  'Out-of-pocket medical expenses',
+  'Medication',
+  'Doctor visits',
+  'Specialist visits',
+  'Therapy / counseling',
+  'Chronic treatment costs',
+  'Clothing',
+  'Haircuts / grooming',
+  'Gym membership',
+  'Cosmetics',
+  'Personal care',
+  'Dining out',
+  'Alcohol',
+  'Hobbies',
+  'Subscriptions',
+  'Holiday savings',
+  'Travel expenses',
+  'Events',
+  'Retirement annuity',
+  'Pension top-ups',
+  'Investment contributions',
+  'Emergency fund contributions',
+  'Stokvel contributions',
+  'Bank charges',
+  'Transfer fees',
+  'Donation commitments',
+  'Church contributions',
+  'Legal fees',
+  'Court orders',
+];
+
+const COMPANY_EXPENSE_TYPES = [
+  'Office rent',
+  'Office maintenance & repairs',
+  'Security services',
+  'Utilities (electricity, water, sewerage, gas)',
+  'Internet / fibre / mobile connections',
+  'Telephone / VoIP services',
+  'Employee salaries and wages',
+  'Employee benefits (medical aid, insurance)',
+  'Temporary staff / contractors',
+  'Staff training & development',
+  'Business insurance (short-term, liability, property, fleet)',
+  'Vehicle lease / purchase payments',
+  'Vehicle insurance',
+  'Fuel',
+  'Vehicle maintenance & servicing',
+  'Tyres',
+  'License & registration',
+  'Courier & delivery services',
+  'Equipment purchase / lease',
+  'Office supplies',
+  'Software subscriptions & licenses',
+  'IT hardware & maintenance',
+  'Marketing & advertising',
+  'Website hosting & domains',
+  'Social media management',
+  'Event hosting',
+  'Travel & accommodation',
+  'Staff meals / entertainment',
+  'Professional fees (legal, accounting, consulting)',
+  'Bank charges / transfer fees',
+  'Loan repayments',
+  'Hire purchase agreements',
+  'Business-specific consumables',
+  'Training materials',
+  'Cleaning & janitorial services',
+  'Security / alarm monitoring',
+  'Waste removal / disposal',
+  'Petty cash expenses',
+  'Subscriptions / memberships (industry associations, publications)',
+];
+
 const faqItems = [
   {
     question: 'How is PAYE calculated in Namibia?',
@@ -130,6 +268,7 @@ export default function Home() {
   const [applyDividendTax, setApplyDividendTax] = useState(false);
   const [interestWithholding, setInterestWithholding] = useState('');
   const [viewMode, setViewMode] = useState('individual');
+  const [otherExpenses, setOtherExpenses] = useState([]);
 
   useEffect(() => {
     const handleWheel = (event) => {
@@ -166,6 +305,7 @@ export default function Home() {
     setDividendAmount('');
     setApplyDividendTax(false);
     setInterestWithholding('');
+    setOtherExpenses([]);
   };
 
   const handleSliderWheel = (event) => {
@@ -250,6 +390,66 @@ export default function Home() {
   const dividendTax = applyDividendTax ? dividendAmountValue * 0.1 : 0;
   const interestWithholdingValue = parseAmount(interestWithholding);
   const interestWithholdingTax = interestWithholdingValue * 0.1;
+  const availableExpenseTypes = viewMode === 'individual' ? INDIVIDUAL_EXPENSE_TYPES : COMPANY_EXPENSE_TYPES;
+  const totalOtherExpenses = otherExpenses.reduce((total, expense) => total + parseAmount(expense.amount), 0);
+  const adjustedNetAnnualIncome = netAnnualIncome - totalOtherExpenses;
+  const adjustedCompanyProfit = corporateProfitValue - corporateTax - totalOtherExpenses;
+
+  const addExpenseItem = () => {
+    setOtherExpenses((currentExpenses) => [
+      ...currentExpenses,
+      {
+        id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        name: '',
+        type: '',
+        amount: '',
+      },
+    ]);
+  };
+
+  const updateExpenseItem = (id, field, value) => {
+    setOtherExpenses((currentExpenses) =>
+      currentExpenses.map((expense) => (expense.id === id ? { ...expense, [field]: value } : expense)),
+    );
+  };
+
+  const moveExpenseItem = (index, direction) => {
+    setOtherExpenses((currentExpenses) => {
+      const newIndex = index + direction;
+      if (newIndex < 0 || newIndex >= currentExpenses.length) {
+        return currentExpenses;
+      }
+      const reorderedExpenses = [...currentExpenses];
+      const [movedExpense] = reorderedExpenses.splice(index, 1);
+      reorderedExpenses.splice(newIndex, 0, movedExpense);
+      return reorderedExpenses;
+    });
+  };
+
+  const removeExpenseItem = (id) => {
+    setOtherExpenses((currentExpenses) => currentExpenses.filter((expense) => expense.id !== id));
+  };
+
+  const handleDownloadExpensesCsv = () => {
+    if (typeof window === 'undefined' || otherExpenses.length === 0) {
+      return;
+    }
+
+    const csvRows = [
+      ['Expense Name', 'Expense Type', 'Expense Amount (N$)'],
+      ...otherExpenses.map((expense) => [expense.name, expense.type, parseAmount(expense.amount).toFixed(2)]),
+    ];
+    const csvContent = csvRows
+      .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+      .join('\n');
+    const csvBlob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const csvUrl = URL.createObjectURL(csvBlob);
+    const downloadLink = document.createElement('a');
+    downloadLink.href = csvUrl;
+    downloadLink.download = `${viewMode}-expenses.csv`;
+    downloadLink.click();
+    URL.revokeObjectURL(csvUrl);
+  };
 
   const handlePrint = () => {
     if (typeof window !== 'undefined') {
@@ -639,6 +839,11 @@ export default function Home() {
                   <button type="button" className="action-button" onClick={handlePrint}>
                     Download Salary Breakdown (PDF)
                   </button>
+                  {otherExpenses.length > 0 && (
+                    <button type="button" className="action-button secondary" onClick={handleDownloadExpensesCsv}>
+                      Download Expenses
+                    </button>
+                  )}
                   <a className="action-button secondary" href={whatsappLink} target="_blank" rel="noreferrer">
                     Share to WhatsApp
                   </a>
@@ -807,6 +1012,11 @@ export default function Home() {
                           <p className="result-subtext">
                             Monthly: <span key={netMonthlyIncome}>{formatCurrency(netMonthlyIncome)}</span>
                           </p>
+                          {otherExpenses.length > 0 && (
+                            <p className="result-subtext">
+                              After other expenses: {formatCurrency(adjustedNetAnnualIncome)}
+                            </p>
+                          )}
                         </div>
                         <table className="data-table">
                           <tbody>
@@ -870,6 +1080,11 @@ export default function Home() {
                           <p className="result-subtext">
                             Corporate tax: <span key={corporateTax}>{formatCurrency(corporateTax)}</span>
                           </p>
+                          {otherExpenses.length > 0 && (
+                            <p className="result-subtext">
+                              After other expenses: {formatCurrency(adjustedCompanyProfit)}
+                            </p>
+                          )}
                         </div>
                         <table className="data-table">
                           <tbody>
@@ -906,6 +1121,78 @@ export default function Home() {
                     )}
                   </>
                 )}
+              </div>
+
+              <div className="card other-expenses-card">
+                <details className="accordion" open>
+                  <summary className="accordion-summary">Other Expenses</summary>
+                  <div className="other-expenses-description">
+                    Add any additional expenses to estimate your pure net income after tax and mandatory deductions.
+                  </div>
+                  <div className="other-expenses-list">
+                    {otherExpenses.map((expense, index) => (
+                      <div className="other-expense-item" key={expense.id}>
+                        <label className="field" htmlFor={`expense-name-${expense.id}`}>
+                          <span className="label-text">Expense Name</span>
+                          <input
+                            id={`expense-name-${expense.id}`}
+                            type="text"
+                            className="input-field"
+                            value={expense.name}
+                            onChange={(event) => updateExpenseItem(expense.id, 'name', event.target.value)}
+                            placeholder="e.g. Household utilities"
+                          />
+                        </label>
+                        <label className="field" htmlFor={`expense-type-${expense.id}`}>
+                          <span className="label-text">Expense Type</span>
+                          <input
+                            id={`expense-type-${expense.id}`}
+                            type="text"
+                            className="input-field"
+                            value={expense.type}
+                            onChange={(event) => updateExpenseItem(expense.id, 'type', event.target.value)}
+                            placeholder="Type or select"
+                            list={`expense-types-${viewMode}`}
+                          />
+                        </label>
+                        <label className="field" htmlFor={`expense-amount-${expense.id}`}>
+                          <span className="label-text">Expense Amount (Annual N$)</span>
+                          <input
+                            id={`expense-amount-${expense.id}`}
+                            type="number"
+                            className="input-field"
+                            value={expense.amount}
+                            onChange={(event) => updateExpenseItem(expense.id, 'amount', event.target.value)}
+                            min="0"
+                            step="0.01"
+                          />
+                        </label>
+                        <div className="expense-item-actions">
+                          <button type="button" className="action-button tertiary" onClick={() => moveExpenseItem(index, -1)}>
+                            Move Up
+                          </button>
+                          <button type="button" className="action-button tertiary" onClick={() => moveExpenseItem(index, 1)}>
+                            Move Down
+                          </button>
+                          <button type="button" className="action-button tertiary" onClick={() => removeExpenseItem(expense.id)}>
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <button type="button" className="action-button" onClick={addExpenseItem}>
+                    Add Expense
+                  </button>
+                  {otherExpenses.length > 0 && (
+                    <p className="other-expenses-total">Total Other Expenses: {formatCurrency(totalOtherExpenses)}</p>
+                  )}
+                  <datalist id={`expense-types-${viewMode}`}>
+                    {availableExpenseTypes.map((expenseType) => (
+                      <option value={expenseType} key={expenseType} />
+                    ))}
+                  </datalist>
+                </details>
               </div>
             </aside>
           </div>
