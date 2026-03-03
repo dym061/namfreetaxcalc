@@ -1023,7 +1023,7 @@ export default function Home() {
 
             <aside className="dashboard-panel summary-panel" aria-live="polite">
               <div className="card executive-summary">
-                <h2 className="section-title">Executive Summary</h2>
+                <h2 className="section-title">Summary</h2>
                 {viewMode === 'individual' ? (
                   <>
                     {annualGrossIncome > 0 ? (
@@ -1147,8 +1147,8 @@ export default function Home() {
                 )}
               </div>
 
-              <div className="card other-expenses-card">
-                <details className="accordion" open>
+              <div className="executive-summary">
+                <details className="" open>
                   <summary className="accordion-summary">Other Expenses</summary>
                   <div className="other-expenses-description">
                     Add monthly expenses, then review them in a table with quick edit/delete actions.
@@ -1163,6 +1163,7 @@ export default function Home() {
                         value={expenseName}
                         onChange={(event) => setExpenseName(event.target.value)}
                         placeholder="e.g. Household utilities"
+						required
                       />
                     </label>
                     <label className="field" htmlFor="expense-type-input">
@@ -1175,6 +1176,7 @@ export default function Home() {
                         onChange={(event) => setExpenseType(event.target.value)}
                         placeholder="Type or select"
                         list={`expense-types-${viewMode}`}
+						required
                       />
                     </label>
                     <label className="field" htmlFor="expense-amount-input">
@@ -1211,17 +1213,17 @@ export default function Home() {
                       <table className="data-table other-expenses-table">
                         <thead>
                           <tr>
-                            <th>Header</th>
-                            <th>Name of expense</th>
-                            <th>Type of Expense</th>
-                            <th className="amount">Amount of expense</th>
-                            <th className="amount">Actions</th>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th className="amount">Amount</th>
+                            <th className="amount"></th>
                           </tr>
                         </thead>
                         <tbody>
                           {otherExpenses.map((expense, index) => (
                             <tr key={expense.id}>
-                              <td>Expense {index + 1}</td>
+                              <td>{index + 1}</td>
                               <td>{expense.name || '-'}</td>
                               <td>{expense.type || '-'}</td>
                               <td className="amount">{formatCurrency(parseAmount(expense.amount))}</td>
